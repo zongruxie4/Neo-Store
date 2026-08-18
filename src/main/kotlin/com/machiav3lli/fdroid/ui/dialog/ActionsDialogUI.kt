@@ -110,6 +110,9 @@ fun KeyDialogUI(
 
     ActionsDialogUI(
         titleText = when (key) {
+            is DialogKey.PermissionBatteryOptimization
+                 -> stringResource(id = R.string.ignore_battery_optimization_title)
+
             is DialogKey.ReleaseIncompatible,
             is DialogKey.ReleaseIssue,
                  -> stringResource(id = R.string.incompatible_version)
@@ -120,8 +123,11 @@ fun KeyDialogUI(
                  -> stringResource(id = R.string.confirmation)
 
             else -> ""
-        }.toString(),
+        },
         messageText = when (key) {
+            is DialogKey.PermissionBatteryOptimization
+                                             -> stringResource(id = R.string.ignore_battery_optimization_message)
+
             is DialogKey.ReleaseIssue        -> stringResource(id = key.resId)
             is DialogKey.Link                -> stringResource(
                 id = R.string.open_DESC_FORMAT,
@@ -193,7 +199,7 @@ fun KeyDialogUI(
             }
 
             else                             -> ""
-        }.toString(),
+        },
         onDismiss = { openDialog.value = false },
         primaryText = when (key) {
             is DialogKey.ReleaseIssue,
@@ -202,6 +208,9 @@ fun KeyDialogUI(
             is DialogKey.Action,
             is DialogKey.BatchDownload,
                  -> stringResource(id = R.string.ok)
+
+            is DialogKey.PermissionBatteryOptimization
+                 -> stringResource(id = R.string.dialog_approve)
 
             else -> ""
         },

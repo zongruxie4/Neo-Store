@@ -407,6 +407,8 @@ data class Request(
 }
 
 sealed class DialogKey {
+    data object None : DialogKey()
+    data object PermissionBatteryOptimization : DialogKey()
     data class Link(val uri: Uri) : DialogKey()
     open class Action(
         val label: String,
