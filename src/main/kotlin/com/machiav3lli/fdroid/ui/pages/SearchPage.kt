@@ -1,5 +1,6 @@
 package com.machiav3lli.fdroid.ui.pages
 
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -95,6 +96,12 @@ fun SearchPage(
                     Preferences[Preferences.Key.TargetSDKSearch] == Preferences.Key.TargetSDKSearch.default.value &&
                     Preferences[Preferences.Key.MinSDKSearch] == Preferences.Key.MinSDKSearch.default.value
         }
+    }
+
+    BackHandler(enabled = pageState.query.isNotBlank()) {
+        // TODO find another solution as this blocks the predictive back gesture
+        viewModel.setSearchQuery("")
+        onDismiss()
     }
 
     LaunchedEffect(Unit) {
