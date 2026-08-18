@@ -572,8 +572,17 @@ data class Repository(
             "A82C68E14AF0AA6A2EC20E6B272EFF25E5A038F3F65884316E0F5E0D91E7B713",
             ""
         )
-        private val IODE = defaultRepository(
+        private val IODE_ALT = defaultRepository(
             "https://raw.githubusercontent.com/iodeOS/fdroid/master/fdroid/repo",
+            "IodéOS F-Droid repo",
+            "The official iodéOS F-Droid repo.",
+            21,
+            false,
+            "EC43610D9ACCA5D2426EB2D5EB74331930014DE79D3C3ACBC17DFE58AA12605F",
+            ""
+        )
+        private val IODE = defaultRepository(
+            "https://fdroid.iode.tech/repo",
             "IodéOS F-Droid repo",
             "The official iodéOS F-Droid repo.",
             21,
@@ -1145,7 +1154,7 @@ data class Repository(
             C_GEO, C_GEO_NIGHTLY,
         )
         val addedReposV18 = listOf(
-            MONERUJO, IODE, SPIRIT_CROC,
+            MONERUJO, IODE_ALT, SPIRIT_CROC,
         )
 
         val addedReposV19 = listOf(
@@ -1226,6 +1235,14 @@ data class Repository(
         val removedReposV1201 = listOf(
             CLOUDBURST, NANODROID, ANONYMOUS_MESSENGER,
             REVOLT, TWOBR, JAK_LINUX, UMBRELLA,
+        )
+
+        val addedReposV1210 = listOf(
+            IODE,
+        )
+
+        val removedReposV1210 = listOf(
+            IODE_ALT,
         )
     }
 }
