@@ -103,9 +103,11 @@ fun Modifier.blockShadow(altStyle: Boolean = !Preferences[Preferences.Key.AltBlo
                         color = MaterialTheme.colorScheme.outlineVariant,
                         shape = MaterialTheme.shapes.extraLarge,
                     )
+                        .clip(MaterialTheme.shapes.extraLarge)
                 },
                 elseFactory = {
                     shadow(elevation = 1.dp, shape = MaterialTheme.shapes.extraLarge)
+                        .clip(MaterialTheme.shapes.extraLarge)
                         .background(MaterialTheme.colorScheme.surfaceContainer)
                 }
             )

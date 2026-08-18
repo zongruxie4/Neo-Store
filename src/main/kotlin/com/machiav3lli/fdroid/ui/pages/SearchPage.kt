@@ -80,7 +80,12 @@ fun SearchPage(
 
     val currentTab by remember {
         derivedStateOf {
-            listOf(Source.SEARCH, Source.SEARCH_INSTALLED, Source.SEARCH_NEW, Source.SEARCH_FAVORITES)
+            listOf(
+                Source.SEARCH,
+                Source.SEARCH_INSTALLED,
+                Source.SEARCH_NEW,
+                Source.SEARCH_FAVORITES
+            )
                 .indexOf(pageState.source)
         }
     }

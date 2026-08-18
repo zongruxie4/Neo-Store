@@ -31,7 +31,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Main.Amoled"
         tools:ignore="GoogleAppIndexingWarning"
-        tools:targetApi="34">
+        tools:targetApi="36">
 
         <activity
             android:name=".NeoActivity"

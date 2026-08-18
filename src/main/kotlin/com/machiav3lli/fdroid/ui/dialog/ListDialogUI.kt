@@ -22,13 +22,13 @@ import com.machiav3lli.fdroid.data.database.entity.Repository
 import com.machiav3lli.fdroid.data.entity.ProductItem
 import com.machiav3lli.fdroid.ui.components.ProductItemContent
 import com.machiav3lli.fdroid.ui.compose.utils.blockShadow
-import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @Composable
 fun <T> ListDialogUI(
     titleText: String,
-    items: List<T>?,
+    items: ImmutableList<T>?,
     itemContent: @Composable (T) -> Unit,
 ) {
     Card(
@@ -81,7 +81,7 @@ fun <T> ListDialogUI(
 fun ProductsListDialogUI(
     title: String,
     repo: Repository,
-    apps: PersistentList<ProductItem>,
+    apps: ImmutableList<ProductItem>,
 ) {
     ListDialogUI(
         titleText = title,

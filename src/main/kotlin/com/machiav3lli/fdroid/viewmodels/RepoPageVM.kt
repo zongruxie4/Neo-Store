@@ -6,7 +6,7 @@ import com.machiav3lli.fdroid.data.database.entity.EmbeddedProduct
 import com.machiav3lli.fdroid.data.database.entity.Repository
 import com.machiav3lli.fdroid.data.entity.ProductItem
 import com.machiav3lli.fdroid.data.repository.RepositoriesRepository
-import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -64,6 +64,6 @@ class RepoPageVM(
 
 data class RepoPageState(
     val repo: Repository? = null,
-    val products: PersistentList<ProductItem> = persistentListOf(),
+    val products: ImmutableList<ProductItem> = persistentListOf(),
     val productsCount: Int = 0,
 )

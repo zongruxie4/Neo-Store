@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -137,6 +138,7 @@ fun PrefsReposPage(viewModel: PrefsVM = koinNeoViewModel()) {
                                     ),
                                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    elevation = FloatingActionButtonDefaults.elevation(0.dp),
                                     onClick = {
                                         scope.launch {
                                             paneNavigator.navigateTo(
@@ -161,6 +163,7 @@ fun PrefsReposPage(viewModel: PrefsVM = koinNeoViewModel()) {
                                     ),
                                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
                                     contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    elevation = FloatingActionButtonDefaults.elevation(0.dp),
                                     onClick = { scanLauncher.launch(Intent(INTENT_ACTION_BINARY_EYE)) }
                                 ) {
                                     Icon(
