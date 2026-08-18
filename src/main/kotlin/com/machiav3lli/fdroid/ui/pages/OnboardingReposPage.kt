@@ -64,6 +64,7 @@ fun OnboardingReposPage(
                     query = pageState.query,
                     modifier = Modifier.fillMaxWidth(),
                     label = stringResource(R.string.search_for_repository),
+                    inFocusOnLaunch = false,
                     onCleanQuery = { viewModel.setSearchQuery("") },
                     onQueryChanged = { newQuery ->
                         if (newQuery != pageState.query) viewModel.setSearchQuery(newQuery)

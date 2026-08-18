@@ -12,6 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -25,6 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -42,6 +46,7 @@ import com.machiav3lli.fdroid.ui.compose.icons.phosphor.X
 import com.machiav3lli.fdroid.ui.compose.utils.HorizontalExpandingVisibility
 import com.machiav3lli.fdroid.ui.compose.utils.addIf
 import com.machiav3lli.fdroid.utils.extension.text.nullIfEmpty
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -179,23 +184,27 @@ fun WideSearchField(
     modifier: Modifier = Modifier,
     label: String = stringResource(id = R.string.search),
     showCloseButton: Boolean = false,
+    inFocusOnLaunch: Boolean = true,
     onClose: () -> Unit = {},
     onCleanQuery: () -> Unit,
     onQueryChanged: (String) -> Unit,
 ) {
-    val focusManager = LocalFocusManager.current
+    val textFieldState = rememberTextFieldState(initialText = query)
     val focusRequester = remember { FocusRequester() }
     var focusRequested by rememberSaveable { mutableStateOf(false) }
 
+    LaunchedEffect(textFieldState) {
+        snapshotFlow { textFieldState.text.toString() }
+            .collectLatest { text ->
+                onQueryChanged(text)
+            }
+    }
+
     LaunchedEffect(Unit) {
-        if (!focusRequested) {
+        if (inFocusOnLaunch && !focusRequested) {
             focusRequester.requestFocus()
             focusRequested = true
         }
-    }
-
-    var textFieldValue by remember {
-        mutableStateOf(query)
     }
 
     Row(
@@ -203,18 +212,14 @@ fun WideSearchField(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         OutlinedTextField(
-            value = textFieldValue,
-            onValueChange = {
-                textFieldValue = it
-                onQueryChanged(it)
-            },
+            state = textFieldState,
             modifier = Modifier
                 .weight(1f)
                 .focusRequester(focusRequester),
             shape = MaterialTheme.shapes.extraLarge,
             trailingIcon = {
                 AnimatedVisibility(
-                    visible = textFieldValue.isNotEmpty(),
+                    visible = textFieldState.text.isNotEmpty(),
                     enter = expandHorizontally(expandFrom = Alignment.Start),
                     exit = shrinkHorizontally(shrinkTowards = Alignment.Start),
                 ) {
@@ -222,22 +227,24 @@ fun WideSearchField(
                         icon = Phosphor.ArrowUUpLeft,
                         description = stringResource(id = R.string.cancel)
                     ) {
-                        textFieldValue = ""
+                        textFieldState.clearText()
                         onCleanQuery()
                     }
                 }
             },
-            singleLine = true,
+            lineLimits = TextFieldLineLimits.SingleLine,
             label = { Text(text = label) },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                showKeyboardOnFocus = inFocusOnLaunch,
+            ),
         )
         if (showCloseButton) RoundButton(
             modifier = Modifier.padding(top = 8.dp),
             icon = Phosphor.X,
             description = stringResource(id = R.string.cancel)
         ) {
-            textFieldValue = ""
+            textFieldState.clearText()
             onCleanQuery()
             onClose()
         }
