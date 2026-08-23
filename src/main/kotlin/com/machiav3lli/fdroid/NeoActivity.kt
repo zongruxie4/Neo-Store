@@ -22,6 +22,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation3.runtime.NavBackStack
 import com.machiav3lli.fdroid.data.content.Preferences
@@ -215,6 +216,7 @@ class NeoActivity : AppCompatActivity() {
     private fun handleIntent(intent: Intent?) {
         val data = intent?.data
         val host = data?.host
+        val fragment = data?.fragment // post-# path
         val fingerprintText = if (data?.isOpaque == true) null
         else data?.getQueryParameter("fingerprint")?.uppercase()?.nullIfEmpty()
             ?: data?.getQueryParameter("FINGERPRINT")?.uppercase()?.nullIfEmpty()
@@ -229,12 +231,25 @@ class NeoActivity : AppCompatActivity() {
                 ) {
                     intent.putExtra(EXTRA_INTENT_HANDLED, true)
                     val (repoAddress, repoFingerprint) = try {
-                        val uri = data.buildUpon()
-                            .scheme("https")
-                            .path(data.path?.pathCropped)
-                            .query(null).fragment(null).build().toString()
-                        Pair(uri, fingerprintText)
-                    } catch (e: Exception) {
+                        if (host == "fdroid.link" && fragment?.isNotBlank() == true) {
+                            val fragmentUri = fragment.toUri()
+                            val repoFingerprint = (fragmentUri.getQueryParameter("fingerprint")
+                                ?: fragmentUri.getQueryParameter("FINGERPRINT")
+                                ?: fingerprintText)
+                                .uppercase().nullIfEmpty()
+                            val repoAddress = fragmentUri.buildUpon()
+                                .scheme("https")
+                                .path(fragmentUri.path?.pathCropped)
+                                .query(null).fragment(null).build().toString()
+                            Pair(repoAddress, repoFingerprint)
+                        } else {
+                            val uri = data.buildUpon()
+                                .scheme("https")
+                                .path(data.path?.pathCropped)
+                                .query(null).fragment(null).build().toString()
+                            Pair(uri, fingerprintText)
+                        }
+                    } catch (_: Exception) {
                         Pair(null, null)
                     }
                     handleSpecialIntent(

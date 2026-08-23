@@ -84,6 +84,7 @@
                 <data android:scheme="https" />
                 <data android:host="apt.izzysoft.de" />
                 <data android:host="f-droid.org" />
+                <data android:host="f-droid.link" />
                 <data android:host="staging.f-droid.org" />
                 <data android:host="www.f-droid.org" />
                 <data android:pathPattern="/.*/packages/.*" />
