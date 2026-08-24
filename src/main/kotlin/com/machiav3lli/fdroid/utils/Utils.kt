@@ -38,7 +38,6 @@ import com.machiav3lli.fdroid.data.database.entity.RBLog
 import com.machiav3lli.fdroid.data.database.entity.Release
 import com.machiav3lli.fdroid.data.database.entity.Repository
 import com.machiav3lli.fdroid.data.entity.AndroidVersion
-import com.machiav3lli.fdroid.data.entity.Contrast
 import com.machiav3lli.fdroid.data.entity.LinkType
 import com.machiav3lli.fdroid.data.entity.PermissionGroup
 import com.machiav3lli.fdroid.manager.work.DownloadWorker
@@ -57,6 +56,7 @@ import com.machiav3lli.fdroid.utils.extension.android.versionCodeCompat
 import com.machiav3lli.fdroid.utils.extension.isInstalled
 import com.machiav3lli.fdroid.utils.extension.text.hex
 import com.machiav3lli.fdroid.utils.extension.text.nullIfEmpty
+import com.materialkolor.Contrast
 import com.topjohnwu.superuser.Shell
 import io.ktor.http.HttpStatusCode
 import rikka.shizuku.Shizuku
@@ -275,18 +275,18 @@ val isBlackTheme: Boolean
         else -> false
     }
 
-fun getGetThemeContrast(): Contrast = when (Preferences[Preferences.Key.Theme]) {
+fun getThemeContrast(): Contrast = when (Preferences[Preferences.Key.Theme]) {
     is Preferences.Theme.LightMediumContrast,
     is Preferences.Theme.DarkMediumContrast,
     is Preferences.Theme.BlackMediumContrast,
-         -> Contrast.MEDIUM
+         -> Contrast.Medium
 
     is Preferences.Theme.LightHighContrast,
     is Preferences.Theme.DarkHighContrast,
     is Preferences.Theme.BlackHighContrast,
-         -> Contrast.HIGH
+         -> Contrast.High
 
-    else -> Contrast.NORMAL
+    else -> Contrast.Default
 }
 
 val isDynamicColorsTheme: Boolean
