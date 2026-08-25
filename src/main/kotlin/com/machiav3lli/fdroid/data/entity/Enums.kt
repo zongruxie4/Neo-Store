@@ -104,6 +104,7 @@ enum class AndroidVersion(override val valueString: String) : Preferences.EnumEn
     UpsideDownCake("14"),
     VanillaIceCream("15"),
     Baklava("16"),
+    CinnamonBun("17"),
 }
 
 
