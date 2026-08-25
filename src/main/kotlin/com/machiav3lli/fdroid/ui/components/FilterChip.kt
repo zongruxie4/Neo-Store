@@ -5,15 +5,23 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.SelectableChipColors
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
@@ -21,6 +29,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -29,11 +39,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.machiav3lli.fdroid.R
 import com.machiav3lli.fdroid.ui.compose.icons.Phosphor
+import com.machiav3lli.fdroid.ui.compose.icons.phosphor.CaretDown
+import com.machiav3lli.fdroid.ui.compose.icons.phosphor.CaretUp
+import com.machiav3lli.fdroid.ui.compose.icons.phosphor.Check
 import com.machiav3lli.fdroid.ui.compose.icons.phosphor.CheckCircle
 import com.machiav3lli.fdroid.ui.compose.icons.phosphor.Circle
 import com.machiav3lli.fdroid.ui.compose.utils.addIf
 import com.machiav3lli.fdroid.utils.extension.android.launchView
+import kotlinx.collections.immutable.ImmutableMap
 
 @Composable
 fun InfoChip(
@@ -251,4 +266,131 @@ fun LinkChip(
             context.launchView(url)
         }
     )
+}
+
+@Composable
+fun <T> ChipsRange(
+    modifier: Modifier = Modifier,
+    firstValue: Pair<T, String>,
+    secondValue: Pair<T, String>,
+    values: ImmutableMap<T, String>,
+    onSelectFirst: (T) -> Unit,
+    onSelectSecond: (T) -> Unit,
+) {
+    var firstExpanded by remember { mutableStateOf(false) }
+    var secondExpanded by remember { mutableStateOf(false) }
+
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        Box(
+            modifier = Modifier.weight(1f),
+        ) {
+            FilledTonalButton(
+                onClick = { firstExpanded = true },
+            ) {
+                Text(
+                    text = stringResource(
+                        R.string.min_FIELD_FORMAT,
+                        firstValue.second
+                    ),
+                    modifier = Modifier.weight(1f),
+                )
+                Icon(
+                    imageVector = if (firstExpanded) Phosphor.CaretUp
+                    else Phosphor.CaretDown,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp),
+                )
+            }
+            DropdownMenu(
+                expanded = firstExpanded,
+                onDismissRequest = { firstExpanded = false },
+                shape = MaterialTheme.shapes.extraLarge,
+            ) {
+                values.forEach { (value, label) ->
+                    DropdownMenuItem(
+                        text = { Text(label) },
+                        selected = value == firstValue.first,
+                        colors = MenuDefaults.selectableItemColors(
+                            containerColor = Color.Transparent,
+                            selectedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                        ),
+                        shapes = MenuDefaults.itemShapes(
+                            shape = MaterialTheme.shapes.extraLarge,
+                            selectedShape = MaterialTheme.shapes.extraLarge,
+                        ),
+                        onClick = {
+                            onSelectFirst(value)
+                            firstExpanded = false
+                        },
+                        selectedLeadingIcon = {
+                            Icon(
+                                imageVector = Phosphor.Check,
+                                contentDescription = null,
+                            )
+                        }
+                    )
+                }
+            }
+        }
+        Text(
+            text = "—",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+        Box(
+            modifier = Modifier.weight(1f),
+        ) {
+            FilledTonalButton(
+                onClick = { secondExpanded = true },
+            ) {
+                Text(
+                    text = stringResource(
+                        R.string.max_FIELD_FORMAT,
+                        secondValue.second
+                    ),
+                    modifier = Modifier.weight(1f),
+                )
+                Icon(
+                    imageVector = if (secondExpanded) Phosphor.CaretUp
+                    else Phosphor.CaretDown,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp),
+                )
+            }
+            DropdownMenu(
+                expanded = secondExpanded,
+                onDismissRequest = { secondExpanded = false },
+                shape = MaterialTheme.shapes.extraLarge,
+            ) {
+                values.forEach { (value, label) ->
+                    DropdownMenuItem(
+                        text = { Text(label) },
+                        selected = value == secondValue.first,
+                        colors = MenuDefaults.selectableItemColors(
+                            containerColor = Color.Transparent,
+                            selectedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                        ),
+                        shapes = MenuDefaults.itemShapes(
+                            shape = MaterialTheme.shapes.extraLarge,
+                            selectedShape = MaterialTheme.shapes.extraLarge,
+                        ),
+                        onClick = {
+                            onSelectSecond(value)
+                            secondExpanded = false
+                        },
+                        selectedLeadingIcon = {
+                            Icon(
+                                imageVector = Phosphor.Check,
+                                contentDescription = null,
+                            )
+                        }
+                    )
+                }
+            }
+        }
+    }
 }
