@@ -68,8 +68,10 @@ fun LatestPage(
                     Preferences[Preferences.Key.CategoriesFilterLatest] == Preferences.Key.CategoriesFilterLatest.default.value &&
                     Preferences[Preferences.Key.LicensesFilterLatest] == Preferences.Key.LicensesFilterLatest.default.value &&
                     Preferences[Preferences.Key.AntifeaturesFilterLatest] == Preferences.Key.AntifeaturesFilterLatest.default.value &&
-                    Preferences[Preferences.Key.TargetSDKLatest] == Preferences.Key.TargetSDKLatest.default.value &&
-                    Preferences[Preferences.Key.MinSDKLatest] == Preferences.Key.MinSDKLatest.default.value
+                    Preferences[Preferences.Key.MinTargetSDKLatest] == Preferences.Key.MinTargetSDKLatest.default.value &&
+                    Preferences[Preferences.Key.MaxTargetSDKLatest] == Preferences.Key.MaxTargetSDKLatest.default.value &&
+                    Preferences[Preferences.Key.MinMinSDKLatest] == Preferences.Key.MinMinSDKLatest.default.value &&
+                    Preferences[Preferences.Key.MaxMinSDKLatest] == Preferences.Key.MaxMinSDKLatest.default.value
         }
     }
 
@@ -82,8 +84,10 @@ fun LatestPage(
                 Preferences.Key.LicensesFilterLatest,
                 Preferences.Key.SortOrderLatest,
                 Preferences.Key.SortOrderAscendingLatest,
-                Preferences.Key.TargetSDKLatest,
-                Preferences.Key.MinSDKLatest,
+                Preferences.Key.MinTargetSDKLatest,
+                Preferences.Key.MaxTargetSDKLatest,
+                Preferences.Key.MinMinSDKLatest,
+                Preferences.Key.MaxMinSDKLatest,
                     -> viewModel.setSortFilter(
                     listOf(
                         Preferences[Preferences.Key.ReposFilterLatest],
@@ -92,8 +96,10 @@ fun LatestPage(
                         Preferences[Preferences.Key.LicensesFilterLatest],
                         Preferences[Preferences.Key.SortOrderLatest],
                         Preferences[Preferences.Key.SortOrderAscendingLatest],
-                        Preferences[Preferences.Key.TargetSDKLatest],
-                        Preferences[Preferences.Key.MinSDKLatest],
+                        Preferences[Preferences.Key.MinTargetSDKLatest],
+                        Preferences[Preferences.Key.MaxTargetSDKLatest],
+                        Preferences[Preferences.Key.MinMinSDKLatest],
+                        Preferences[Preferences.Key.MaxMinSDKLatest],
                     ).toString()
                 )
 

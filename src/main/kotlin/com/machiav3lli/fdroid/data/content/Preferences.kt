@@ -112,14 +112,22 @@ data object Preferences : OnSharedPreferenceChangeListener {
         Key.LicensesFilterLatest,
         Key.LicensesFilterInstalled,
         Key.LicensesFilterSearch,
-        Key.MinSDKExplore,
-        Key.MinSDKLatest,
-        Key.MinSDKInstalled,
-        Key.MinSDKSearch,
-        Key.TargetSDKExplore,
-        Key.TargetSDKLatest,
-        Key.TargetSDKInstalled,
-        Key.TargetSDKSearch,
+        Key.MinMinSDKExplore,
+        Key.MinMinSDKLatest,
+        Key.MinMinSDKInstalled,
+        Key.MinMinSDKSearch,
+        Key.MaxMinSDKExplore,
+        Key.MaxMinSDKLatest,
+        Key.MaxMinSDKInstalled,
+        Key.MaxMinSDKSearch,
+        Key.MinTargetSDKExplore,
+        Key.MinTargetSDKLatest,
+        Key.MinTargetSDKInstalled,
+        Key.MinTargetSDKSearch,
+        Key.MaxTargetSDKExplore,
+        Key.MaxTargetSDKLatest,
+        Key.MaxTargetSDKInstalled,
+        Key.MaxTargetSDKSearch,
         // invisible values
         Key.InitialSync,
         Key.IgnoreDisableBatteryOptimization,
@@ -525,43 +533,83 @@ data object Preferences : OnSharedPreferenceChangeListener {
             Value.StringSetValue(emptySet())
         )
 
-        data object TargetSDKExplore : Key<AndroidVersion>(
+        data object MinTargetSDKExplore : Key<AndroidVersion>(
             "targetsdk_filter_explore",
             Value.EnumValue(AndroidVersion.Unknown, AndroidVersion::class.java)
         )
 
-        data object TargetSDKLatest : Key<AndroidVersion>(
+        data object MinTargetSDKLatest : Key<AndroidVersion>(
             "targetsdk_filter_latest",
             Value.EnumValue(AndroidVersion.Unknown, AndroidVersion::class.java)
         )
 
-        data object TargetSDKInstalled : Key<AndroidVersion>(
+        data object MinTargetSDKInstalled : Key<AndroidVersion>(
             "targetsdk_filter_installed",
             Value.EnumValue(AndroidVersion.Unknown, AndroidVersion::class.java)
         )
 
-        data object TargetSDKSearch : Key<AndroidVersion>(
+        data object MinTargetSDKSearch : Key<AndroidVersion>(
             "targetsdk_filter_search",
             Value.EnumValue(AndroidVersion.Unknown, AndroidVersion::class.java)
         )
 
-        data object MinSDKExplore : Key<AndroidVersion>(
+        data object MaxTargetSDKExplore : Key<AndroidVersion>(
+            "max_targetsdk_filter_explore",
+            Value.EnumValue(AndroidVersion.Unknown, AndroidVersion::class.java)
+        )
+
+        data object MaxTargetSDKLatest : Key<AndroidVersion>(
+            "max_targetsdk_filter_latest",
+            Value.EnumValue(AndroidVersion.Unknown, AndroidVersion::class.java)
+        )
+
+        data object MaxTargetSDKInstalled : Key<AndroidVersion>(
+            "max_targetsdk_filter_installed",
+            Value.EnumValue(AndroidVersion.Unknown, AndroidVersion::class.java)
+        )
+
+        data object MaxTargetSDKSearch : Key<AndroidVersion>(
+            "max_targetsdk_filter_search",
+            Value.EnumValue(AndroidVersion.Unknown, AndroidVersion::class.java)
+        )
+
+        data object MinMinSDKExplore : Key<AndroidVersion>(
             "minsdk_filter_explore",
             Value.EnumValue(AndroidVersion.Unknown, AndroidVersion::class.java)
         )
 
-        data object MinSDKLatest : Key<AndroidVersion>(
+        data object MinMinSDKLatest : Key<AndroidVersion>(
             "minsdk_filter_latest",
             Value.EnumValue(AndroidVersion.Unknown, AndroidVersion::class.java)
         )
 
-        data object MinSDKInstalled : Key<AndroidVersion>(
+        data object MinMinSDKInstalled : Key<AndroidVersion>(
             "minsdk_filter_installed",
             Value.EnumValue(AndroidVersion.Unknown, AndroidVersion::class.java)
         )
 
-        data object MinSDKSearch : Key<AndroidVersion>(
+        data object MinMinSDKSearch : Key<AndroidVersion>(
             "minsdk_filter_search",
+            Value.EnumValue(AndroidVersion.Unknown, AndroidVersion::class.java)
+        )
+
+        data object MaxMinSDKExplore : Key<AndroidVersion>(
+            "max_minsdk_filter_explore",
+            Value.EnumValue(AndroidVersion.Unknown, AndroidVersion::class.java)
+        )
+
+        data object MaxMinSDKLatest : Key<AndroidVersion>(
+            "max_minsdk_filter_latest",
+            Value.EnumValue(AndroidVersion.Unknown, AndroidVersion::class.java)
+        )
+
+        data object MaxMinSDKInstalled : Key<AndroidVersion>(
+            "max_minsdk_filter_installed",
+            Value.EnumValue(AndroidVersion.Unknown, AndroidVersion::class.java)
+        )
+
+        data object MaxMinSDKSearch : Key<AndroidVersion>(
+            "max_minsdk_filter_search",
             Value.EnumValue(AndroidVersion.Unknown, AndroidVersion::class.java)
         )
 

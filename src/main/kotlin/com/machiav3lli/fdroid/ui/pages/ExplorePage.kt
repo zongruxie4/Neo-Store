@@ -115,8 +115,10 @@ fun ExplorePage(
                     Preferences[Preferences.Key.ReposFilterExplore] == Preferences.Key.ReposFilterExplore.default.value &&
                     Preferences[Preferences.Key.LicensesFilterExplore] == Preferences.Key.LicensesFilterExplore.default.value &&
                     Preferences[Preferences.Key.AntifeaturesFilterExplore] == Preferences.Key.AntifeaturesFilterExplore.default.value &&
-                    Preferences[Preferences.Key.TargetSDKExplore] == Preferences.Key.TargetSDKExplore.default.value &&
-                    Preferences[Preferences.Key.MinSDKExplore] == Preferences.Key.MinSDKExplore.default.value
+                    Preferences[Preferences.Key.MinTargetSDKExplore] == Preferences.Key.MinTargetSDKExplore.default.value &&
+                    Preferences[Preferences.Key.MaxTargetSDKExplore] == Preferences.Key.MaxTargetSDKExplore.default.value &&
+                    Preferences[Preferences.Key.MinMinSDKExplore] == Preferences.Key.MinMinSDKExplore.default.value &&
+                    Preferences[Preferences.Key.MaxMinSDKExplore] == Preferences.Key.MaxMinSDKExplore.default.value
         }
     }
 
@@ -129,8 +131,10 @@ fun ExplorePage(
                 Preferences.Key.LicensesFilterExplore,
                 Preferences.Key.SortOrderExplore,
                 Preferences.Key.SortOrderAscendingExplore,
-                Preferences.Key.TargetSDKExplore,
-                Preferences.Key.MinSDKExplore,
+                Preferences.Key.MinTargetSDKExplore,
+                Preferences.Key.MaxTargetSDKExplore,
+                Preferences.Key.MinMinSDKExplore,
+                Preferences.Key.MaxMinSDKExplore,
                     -> viewModel.setSortFilter(
                     listOf(
                         Preferences[Preferences.Key.ReposFilterExplore],
@@ -139,8 +143,10 @@ fun ExplorePage(
                         Preferences[Preferences.Key.LicensesFilterExplore],
                         Preferences[Preferences.Key.SortOrderExplore],
                         Preferences[Preferences.Key.SortOrderAscendingExplore],
-                        Preferences[Preferences.Key.TargetSDKExplore],
-                        Preferences[Preferences.Key.MinSDKExplore],
+                        Preferences[Preferences.Key.MinTargetSDKExplore],
+                        Preferences[Preferences.Key.MaxTargetSDKExplore],
+                        Preferences[Preferences.Key.MinMinSDKExplore],
+                        Preferences[Preferences.Key.MaxMinSDKExplore],
                     ).toString()
                 )
 

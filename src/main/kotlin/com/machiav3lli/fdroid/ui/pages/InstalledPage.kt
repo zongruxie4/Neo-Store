@@ -85,8 +85,10 @@ fun InstalledPage(
                     Preferences[Preferences.Key.CategoriesFilterInstalled] == Preferences.Key.CategoriesFilterInstalled.default.value &&
                     Preferences[Preferences.Key.LicensesFilterInstalled] == Preferences.Key.LicensesFilterInstalled.default.value &&
                     Preferences[Preferences.Key.AntifeaturesFilterInstalled] == Preferences.Key.AntifeaturesFilterInstalled.default.value &&
-                    Preferences[Preferences.Key.TargetSDKInstalled] == Preferences.Key.TargetSDKInstalled.default.value &&
-                    Preferences[Preferences.Key.MinSDKInstalled] == Preferences.Key.MinSDKInstalled.default.value
+                    Preferences[Preferences.Key.MinTargetSDKInstalled] == Preferences.Key.MinTargetSDKInstalled.default.value &&
+                    Preferences[Preferences.Key.MaxTargetSDKInstalled] == Preferences.Key.MinTargetSDKInstalled.default.value &&
+                    Preferences[Preferences.Key.MinMinSDKInstalled] == Preferences.Key.MinMinSDKInstalled.default.value &&
+                    Preferences[Preferences.Key.MaxMinSDKInstalled] == Preferences.Key.MinMinSDKInstalled.default.value
         }
     }
 
@@ -99,8 +101,10 @@ fun InstalledPage(
                 Preferences.Key.LicensesFilterInstalled,
                 Preferences.Key.SortOrderInstalled,
                 Preferences.Key.SortOrderAscendingInstalled,
-                Preferences.Key.TargetSDKInstalled,
-                Preferences.Key.MinSDKInstalled,
+                Preferences.Key.MinTargetSDKInstalled,
+                Preferences.Key.MaxTargetSDKInstalled,
+                Preferences.Key.MinMinSDKInstalled,
+                Preferences.Key.MaxMinSDKInstalled,
                     -> viewModel.setSortFilter(
                     listOf(
                         Preferences[Preferences.Key.ReposFilterInstalled],
@@ -109,8 +113,10 @@ fun InstalledPage(
                         Preferences[Preferences.Key.LicensesFilterInstalled],
                         Preferences[Preferences.Key.SortOrderInstalled],
                         Preferences[Preferences.Key.SortOrderAscendingInstalled],
-                        Preferences[Preferences.Key.TargetSDKInstalled],
-                        Preferences[Preferences.Key.MinSDKInstalled],
+                        Preferences[Preferences.Key.MinTargetSDKInstalled],
+                        Preferences[Preferences.Key.MaxTargetSDKInstalled],
+                        Preferences[Preferences.Key.MinMinSDKInstalled],
+                        Preferences[Preferences.Key.MaxMinSDKInstalled],
                     ).toString()
                 )
 

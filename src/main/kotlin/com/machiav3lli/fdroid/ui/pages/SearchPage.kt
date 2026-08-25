@@ -98,8 +98,10 @@ fun SearchPage(
                     Preferences[Preferences.Key.CategoriesFilterSearch] == Preferences.Key.CategoriesFilterSearch.default.value &&
                     Preferences[Preferences.Key.LicensesFilterSearch] == Preferences.Key.LicensesFilterSearch.default.value &&
                     Preferences[Preferences.Key.AntifeaturesFilterSearch] == Preferences.Key.AntifeaturesFilterSearch.default.value &&
-                    Preferences[Preferences.Key.TargetSDKSearch] == Preferences.Key.TargetSDKSearch.default.value &&
-                    Preferences[Preferences.Key.MinSDKSearch] == Preferences.Key.MinSDKSearch.default.value
+                    Preferences[Preferences.Key.MinTargetSDKSearch] == Preferences.Key.MinTargetSDKSearch.default.value &&
+                    Preferences[Preferences.Key.MaxTargetSDKSearch] == Preferences.Key.MaxTargetSDKSearch.default.value &&
+                    Preferences[Preferences.Key.MinMinSDKSearch] == Preferences.Key.MinMinSDKSearch.default.value &&
+                    Preferences[Preferences.Key.MaxMinSDKSearch] == Preferences.Key.MaxMinSDKSearch.default.value
         }
     }
 
@@ -118,8 +120,10 @@ fun SearchPage(
                 Preferences.Key.LicensesFilterSearch,
                 Preferences.Key.SortOrderSearch,
                 Preferences.Key.SortOrderAscendingSearch,
-                Preferences.Key.TargetSDKSearch,
-                Preferences.Key.MinSDKSearch,
+                Preferences.Key.MinTargetSDKSearch,
+                Preferences.Key.MaxTargetSDKSearch,
+                Preferences.Key.MinMinSDKSearch,
+                Preferences.Key.MaxMinSDKSearch,
                     -> viewModel.setSortFilter(
                     listOf(
                         Preferences[Preferences.Key.ReposFilterSearch],
@@ -128,8 +132,10 @@ fun SearchPage(
                         Preferences[Preferences.Key.LicensesFilterSearch],
                         Preferences[Preferences.Key.SortOrderSearch],
                         Preferences[Preferences.Key.SortOrderAscendingSearch],
-                        Preferences[Preferences.Key.TargetSDKSearch],
-                        Preferences[Preferences.Key.MinSDKSearch],
+                        Preferences[Preferences.Key.MinTargetSDKSearch],
+                        Preferences[Preferences.Key.MaxTargetSDKSearch],
+                        Preferences[Preferences.Key.MinMinSDKSearch],
+                        Preferences[Preferences.Key.MaxMinSDKSearch],
                     ).toString()
                 )
 
