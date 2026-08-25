@@ -215,8 +215,10 @@ data class Request(
     val filteredAntiFeatures: Set<String>,
     val filteredLicenses: Set<String>,
     val numberOfItems: Int = 0,
-    val minSDK: Int = 0,
-    val targetSDK: Int = 0,
+    val minMinSDK: Int = 0,
+    val maxMinSDK: Int = 0,
+    val minTargetSDK: Int = 0,
+    val maxTargetSDK: Int = 0,
 ) {
     companion object {
         val All: Request
@@ -232,8 +234,10 @@ data class Request(
                 filteredOutRepos = Preferences[Preferences.Key.ReposFilterExplore],
                 filteredAntiFeatures = Preferences[Preferences.Key.AntifeaturesFilterExplore],
                 filteredLicenses = Preferences[Preferences.Key.LicensesFilterExplore],
-                minSDK = Preferences[Preferences.Key.MinSDKExplore].ordinal,
-                targetSDK = Preferences[Preferences.Key.TargetSDKExplore].ordinal,
+                minMinSDK = Preferences[Preferences.Key.MinMinSDKExplore].ordinal,
+                maxMinSDK = Preferences[Preferences.Key.MaxMinSDKExplore].ordinal,
+                minTargetSDK = Preferences[Preferences.Key.MinTargetSDKExplore].ordinal,
+                maxTargetSDK = Preferences[Preferences.Key.MaxTargetSDKExplore].ordinal,
             )
 
         val Favorites: Request
@@ -264,8 +268,10 @@ data class Request(
                 filteredOutRepos = Preferences[Preferences.Key.ReposFilterSearch],
                 filteredAntiFeatures = Preferences[Preferences.Key.AntifeaturesFilterSearch],
                 filteredLicenses = Preferences[Preferences.Key.LicensesFilterSearch],
-                minSDK = Preferences[Preferences.Key.MinSDKSearch].ordinal,
-                targetSDK = Preferences[Preferences.Key.TargetSDKSearch].ordinal,
+                minMinSDK = Preferences[Preferences.Key.MinMinSDKSearch].ordinal,
+                maxMinSDK = Preferences[Preferences.Key.MaxMinSDKSearch].ordinal,
+                minTargetSDK = Preferences[Preferences.Key.MinTargetSDKSearch].ordinal,
+                maxTargetSDK = Preferences[Preferences.Key.MaxTargetSDKSearch].ordinal,
             )
 
         val SearchFavorites: Request
@@ -281,8 +287,10 @@ data class Request(
                 filteredOutRepos = Preferences[Preferences.Key.ReposFilterSearch],
                 filteredAntiFeatures = Preferences[Preferences.Key.AntifeaturesFilterSearch],
                 filteredLicenses = Preferences[Preferences.Key.LicensesFilterSearch],
-                minSDK = Preferences[Preferences.Key.MinSDKSearch].ordinal,
-                targetSDK = Preferences[Preferences.Key.TargetSDKSearch].ordinal,
+                minMinSDK = Preferences[Preferences.Key.MinMinSDKSearch].ordinal,
+                maxMinSDK = Preferences[Preferences.Key.MaxMinSDKSearch].ordinal,
+                minTargetSDK = Preferences[Preferences.Key.MinTargetSDKSearch].ordinal,
+                maxTargetSDK = Preferences[Preferences.Key.MaxTargetSDKSearch].ordinal,
             )
 
         val Installed: Request
@@ -298,8 +306,10 @@ data class Request(
                 filteredOutRepos = Preferences[Preferences.Key.ReposFilterInstalled],
                 filteredAntiFeatures = Preferences[Preferences.Key.AntifeaturesFilterInstalled],
                 filteredLicenses = Preferences[Preferences.Key.LicensesFilterInstalled],
-                minSDK = Preferences[Preferences.Key.MinSDKInstalled].ordinal,
-                targetSDK = Preferences[Preferences.Key.TargetSDKInstalled].ordinal,
+                minMinSDK = Preferences[Preferences.Key.MinMinSDKInstalled].ordinal,
+                maxMinSDK = Preferences[Preferences.Key.MaxMinSDKInstalled].ordinal,
+                minTargetSDK = Preferences[Preferences.Key.MinTargetSDKInstalled].ordinal,
+                maxTargetSDK = Preferences[Preferences.Key.MaxTargetSDKInstalled].ordinal,
             )
 
         val SearchInstalled: Request
@@ -315,8 +325,10 @@ data class Request(
                 filteredOutRepos = Preferences[Preferences.Key.ReposFilterSearch],
                 filteredAntiFeatures = Preferences[Preferences.Key.AntifeaturesFilterSearch],
                 filteredLicenses = Preferences[Preferences.Key.LicensesFilterSearch],
-                minSDK = Preferences[Preferences.Key.MinSDKSearch].ordinal,
-                targetSDK = Preferences[Preferences.Key.TargetSDKSearch].ordinal,
+                minMinSDK = Preferences[Preferences.Key.MinMinSDKSearch].ordinal,
+                maxMinSDK = Preferences[Preferences.Key.MaxMinSDKSearch].ordinal,
+                minTargetSDK = Preferences[Preferences.Key.MinTargetSDKSearch].ordinal,
+                maxTargetSDK = Preferences[Preferences.Key.MaxTargetSDKSearch].ordinal,
             )
 
         val Updates: Request
@@ -349,8 +361,10 @@ data class Request(
                 filteredAntiFeatures = Preferences[Preferences.Key.AntifeaturesFilterLatest],
                 filteredLicenses = Preferences[Preferences.Key.LicensesFilterLatest],
                 numberOfItems = Preferences[Preferences.Key.UpdatedApps],
-                minSDK = Preferences[Preferences.Key.MinSDKLatest].ordinal,
-                targetSDK = Preferences[Preferences.Key.TargetSDKLatest].ordinal,
+                minMinSDK = Preferences[Preferences.Key.MinMinSDKLatest].ordinal,
+                maxMinSDK = Preferences[Preferences.Key.MaxMinSDKLatest].ordinal,
+                minTargetSDK = Preferences[Preferences.Key.MinTargetSDKLatest].ordinal,
+                maxTargetSDK = Preferences[Preferences.Key.MaxTargetSDKLatest].ordinal,
             )
 
         val New: Request
@@ -367,8 +381,10 @@ data class Request(
                 filteredAntiFeatures = emptySet(),
                 filteredLicenses = emptySet(),
                 numberOfItems = Preferences[Preferences.Key.NewApps],
-                minSDK = Preferences[Preferences.Key.MinSDKLatest].ordinal,
-                targetSDK = Preferences[Preferences.Key.TargetSDKLatest].ordinal,
+                minMinSDK = Preferences[Preferences.Key.MinMinSDKLatest].ordinal,
+                maxMinSDK = Preferences[Preferences.Key.MaxMinSDKLatest].ordinal,
+                minTargetSDK = Preferences[Preferences.Key.MinTargetSDKLatest].ordinal,
+                maxTargetSDK = Preferences[Preferences.Key.MaxTargetSDKLatest].ordinal,
             )
 
         val SearchNew: Request
@@ -384,8 +400,10 @@ data class Request(
                 filteredOutRepos = Preferences[Preferences.Key.ReposFilterSearch],
                 filteredAntiFeatures = Preferences[Preferences.Key.AntifeaturesFilterSearch],
                 filteredLicenses = Preferences[Preferences.Key.LicensesFilterSearch],
-                minSDK = Preferences[Preferences.Key.MinSDKSearch].ordinal,
-                targetSDK = Preferences[Preferences.Key.TargetSDKSearch].ordinal,
+                minMinSDK = Preferences[Preferences.Key.MinMinSDKSearch].ordinal,
+                maxMinSDK = Preferences[Preferences.Key.MaxMinSDKSearch].ordinal,
+                minTargetSDK = Preferences[Preferences.Key.MinTargetSDKSearch].ordinal,
+                maxTargetSDK = Preferences[Preferences.Key.MaxTargetSDKSearch].ordinal,
             )
 
         val None: Request

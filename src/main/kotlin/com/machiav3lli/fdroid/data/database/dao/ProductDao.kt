@@ -115,7 +115,8 @@ interface ProductDao : BaseDao<Product> {
         filteredLicenses: Set<String> = emptySet(),
         order: Order, ascending: Boolean, numberOfItems: Int = 0,
         updateCategory: UpdateCategory = UpdateCategory.ALL,
-        author: String = "", minSdkVersion: Int = 0, targetSdkVersion: Int = 0
+        author: String = "", minMinSdkVersion: Int = 0, maxMinSdkVersion: Int = 0,
+        minTargetSdkVersion: Int = 0, maxTargetSdkVersion: Int = 0,
     ): List<EmbeddedProduct> = queryObject(
         buildProductQuery(
             installed = installed,
@@ -130,8 +131,10 @@ interface ProductDao : BaseDao<Product> {
             numberOfItems = numberOfItems,
             updateCategory = updateCategory,
             author = author,
-            minSdkVersion = minSdkVersion,
-            targetSdkVersion = targetSdkVersion,
+            minMinSdkVersion = minMinSdkVersion,
+            maxMinSdkVersion = maxMinSdkVersion,
+            minTargetSdkVersion = minTargetSdkVersion,
+            maxTargetSdkVersion = maxTargetSdkVersion,
         )
     )
 
@@ -152,8 +155,10 @@ interface ProductDao : BaseDao<Product> {
             ascending = request.ascending,
             numberOfItems = request.numberOfItems,
             updateCategory = request.updateCategory,
-            targetSdkVersion = request.targetSDK,
-            minSdkVersion = request.minSDK,
+            minTargetSdkVersion = request.minTargetSDK,
+            maxTargetSdkVersion = request.maxTargetSDK,
+            minMinSdkVersion = request.minMinSDK,
+            maxMinSdkVersion = request.maxMinSDK,
         )
     )
 
@@ -183,8 +188,10 @@ interface ProductDao : BaseDao<Product> {
         numberOfItems: Int = 0,
         updateCategory: UpdateCategory = UpdateCategory.ALL,
         author: String = "",
-        targetSdkVersion: Int = 0,
-        minSdkVersion: Int = 0,
+        minTargetSdkVersion: Int = 0,
+        maxTargetSdkVersion: Int = 0,
+        minMinSdkVersion: Int = 0,
+        maxMinSdkVersion: Int = 0,
     ): SupportSQLiteQuery {
         val builder = QueryBuilder()
 
@@ -359,32 +366,36 @@ interface ProductDao : BaseDao<Product> {
         }
 
         //// SDK
-        targetSdkVersion.takeIf { it > 1 }?.let { minTarget ->
+        if (minTargetSdkVersion + maxTargetSdkVersion > 0) {
             whereConditions.add(
                 """
             EXISTS (
                 SELECT 1 FROM $TABLE_RELEASE
                 WHERE $TABLE_RELEASE.$ROW_PACKAGE_NAME = $TABLE_PRODUCT.$ROW_PACKAGE_NAME
                 AND $TABLE_RELEASE.$ROW_REPOSITORY_ID = $TABLE_PRODUCT.$ROW_REPOSITORY_ID
-                AND $TABLE_RELEASE.$ROW_TARGETSDK_VERSION >= ?
+                ${if (minTargetSdkVersion > 0) "AND $TABLE_RELEASE.$ROW_TARGETSDK_VERSION >= ?" else ""}
+                ${if (maxTargetSdkVersion > 0) "AND $TABLE_RELEASE.$ROW_TARGETSDK_VERSION <= ?" else ""}
             )
         """.trimIndent()
             )
-            builder.addArgument(minTarget.toString())
+            if (minTargetSdkVersion > 0) builder.addArgument(minTargetSdkVersion.toString())
+            if (maxTargetSdkVersion > 0) builder.addArgument(maxTargetSdkVersion.toString())
         }
 
-        minSdkVersion.takeIf { it > 1 }?.let { minMin ->
+        if (minMinSdkVersion + maxMinSdkVersion > 0) {
             whereConditions.add(
                 """
             EXISTS (
                 SELECT 1 FROM $TABLE_RELEASE
                 WHERE $TABLE_RELEASE.$ROW_PACKAGE_NAME = $TABLE_PRODUCT.$ROW_PACKAGE_NAME
                 AND $TABLE_RELEASE.$ROW_REPOSITORY_ID = $TABLE_PRODUCT.$ROW_REPOSITORY_ID
-                AND $TABLE_RELEASE.$ROW_MINSDK_VERSION >= ?
+                ${if (minMinSdkVersion > 0) "AND $TABLE_RELEASE.$ROW_MINSDK_VERSION >= ?" else ""}
+                ${if (maxMinSdkVersion > 0) "AND $TABLE_RELEASE.$ROW_MINSDK_VERSION <= ?" else ""}
             )
         """.trimIndent()
             )
-            builder.addArgument(minMin.toString())
+            if (minMinSdkVersion > 0) builder.addArgument(minMinSdkVersion.toString())
+            if (maxMinSdkVersion > 0) builder.addArgument(maxMinSdkVersion.toString())
         }
 
         if (whereConditions.isNotEmpty()) {
