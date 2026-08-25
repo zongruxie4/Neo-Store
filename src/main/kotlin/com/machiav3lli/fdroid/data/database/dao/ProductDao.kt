@@ -388,7 +388,7 @@ interface ProductDao : BaseDao<Product> {
         }
 
         if (whereConditions.isNotEmpty()) {
-            builder += "WHERE ${whereConditions.joinToString(" AND ")}"
+            builder += "WHERE (${whereConditions.joinToString(") AND (")})"
         }
 
         // Group By
