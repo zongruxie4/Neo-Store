@@ -53,7 +53,6 @@ import com.machiav3lli.fdroid.ui.dialog.LaunchDialog
 import com.machiav3lli.fdroid.utils.extension.android.Android
 import com.machiav3lli.fdroid.utils.extension.android.signerSHA256Signatures
 import com.machiav3lli.fdroid.utils.extension.android.versionCodeCompat
-import com.machiav3lli.fdroid.utils.extension.isInstalled
 import com.machiav3lli.fdroid.utils.extension.text.hex
 import com.machiav3lli.fdroid.utils.extension.text.nullIfEmpty
 import com.materialkolor.Contrast
@@ -593,7 +592,13 @@ val Context.amInstalled: Boolean
 
 val Context.hasShizukuOrSui: Boolean
     get() = Android.sdk(Build.VERSION_CODES.O) &&
-            (packageManager.isInstalled(ShizukuProvider.MANAGER_APPLICATION_ID) || Sui.isSui())
+            (hasShizukuPermissionV23() || Sui.isSui())
+
+private fun Context.hasShizukuPermissionV23(): Boolean {
+    return packageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS).any { pkgInfo ->
+        pkgInfo.requestedPermissions?.contains(ShizukuProvider.PERMISSION) == true
+    }
+}
 
 fun hasShizukuPermission(): Boolean =
     Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
