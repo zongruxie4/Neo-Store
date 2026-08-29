@@ -25,6 +25,7 @@ import com.machiav3lli.fdroid.R
 import com.machiav3lli.fdroid.data.content.Preferences
 import com.machiav3lli.fdroid.ui.components.prefs.PreferenceGroup
 import com.machiav3lli.fdroid.ui.dialog.BaseDialog
+import com.machiav3lli.fdroid.ui.dialog.ThemePrefDialogUI
 import com.machiav3lli.fdroid.ui.dialog.EnumSelectionPrefDialogUI
 import com.machiav3lli.fdroid.ui.dialog.IntInputPrefDialogUI
 import com.machiav3lli.fdroid.ui.dialog.LanguagePrefDialogUI
@@ -42,7 +43,7 @@ fun PrefsPersonalPage() {
     }
     val personalPrefs = listOf(
         Preferences.Key.Language,
-        Preferences.Key.Theme,
+        Preferences.Key.AppTheme,
         Preferences.Key.DefaultTab,
         Preferences.Key.KidsMode,
         Preferences.Key.DownloadShowDialog,
@@ -126,6 +127,10 @@ fun PrefsPersonalPage() {
         } else BaseDialog(openDialogCustom = openDialog) {
             when (dialogPref?.default?.value) {
                 PREFS_LANGUAGE_DEFAULT        -> LanguagePrefDialogUI(
+                    openDialogCustom = openDialog
+                )
+
+                is Preferences.NeoTheme -> ThemePrefDialogUI(
                     openDialogCustom = openDialog
                 )
 

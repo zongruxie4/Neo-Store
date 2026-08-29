@@ -193,6 +193,10 @@ val NonBooleanPrefsMeta = mapOf(
         R.string.theme,
         Phosphor.Swatches
     ),
+    Preferences.Key.AppTheme to Pair(
+        R.string.theme,
+        Phosphor.Swatches
+    ),
     Preferences.Key.DefaultTab to Pair(
         R.string.default_tab,
         Phosphor.DeviceMobile
@@ -264,6 +268,10 @@ val NonBooleanPrefsMeta = mapOf(
     Preferences.Key.DLStatsProvider to Pair(
         R.string.dlstats_provider,
         Phosphor.Compass
+    ),
+    Preferences.Key.PackagesBlocklist to Pair(
+        R.string.packages_blocklist,
+        Phosphor.ProhibitInset
     ),
 )
 

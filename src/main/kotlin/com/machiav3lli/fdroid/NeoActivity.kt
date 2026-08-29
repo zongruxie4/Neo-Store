@@ -13,7 +13,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -90,12 +89,12 @@ class NeoActivity : AppCompatActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         (application as NeoApp).mActivity = this
-        currentTheme = Preferences[Preferences.Key.Theme].resId
+        currentTheme = Preferences[Preferences.Key.AppTheme].resId
         NeoApp.mainActivity = this
         super.onCreate(savedInstanceState)
 
         setContent {
-            DisposableEffect(Preferences[Preferences.Key.Theme]) {
+            DisposableEffect(Preferences[Preferences.Key.AppTheme]) {
                 enableEdgeToEdge(
                     statusBarStyle = SystemBarStyle.auto(
                         Color.TRANSPARENT,
@@ -110,11 +109,7 @@ class NeoActivity : AppCompatActivity() {
             }
 
             AppTheme(
-                darkTheme = when (Preferences[Preferences.Key.Theme]) {
-                    is Preferences.Theme.System      -> isSystemInDarkTheme()
-                    is Preferences.Theme.SystemBlack -> isSystemInDarkTheme()
-                    else                             -> isDarkTheme
-                }
+                darkTheme = isDarkTheme,
             ) {
                 BackHandler(navStack.size == 1) {
                     moveTaskToBack(true)
@@ -141,7 +136,7 @@ class NeoActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (currentTheme != Preferences[Preferences.Key.Theme].resId)
+        if (currentTheme != Preferences[Preferences.Key.AppTheme].resId)
             recreate()
         lifecycleScope.launch {
             if (!InstallUtils.restartOrphanedInstallTasks()) {

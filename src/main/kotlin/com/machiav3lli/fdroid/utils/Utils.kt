@@ -280,62 +280,30 @@ fun <T> findSuggestedProduct(
 }
 
 val Context.isDarkTheme: Boolean
-    get() = when (Preferences[Preferences.Key.Theme]) {
-        is Preferences.Theme.Light,
-        is Preferences.Theme.LightMediumContrast,
-        is Preferences.Theme.LightHighContrast,
-        is Preferences.Theme.DynamicLight,
+    get() = when (Preferences[Preferences.Key.AppTheme].nightMode) {
+        AppCompatDelegate.MODE_NIGHT_NO
              -> false
 
-        is Preferences.Theme.Dark,
-        is Preferences.Theme.DarkMediumContrast,
-        is Preferences.Theme.DarkHighContrast,
-        is Preferences.Theme.Black,
-        is Preferences.Theme.BlackMediumContrast,
-        is Preferences.Theme.BlackHighContrast,
-        is Preferences.Theme.DynamicDark,
-        is Preferences.Theme.DynamicBlack,
+        AppCompatDelegate.MODE_NIGHT_YES
              -> true
 
         else -> resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
     }
 
 val isBlackTheme: Boolean
-    get() = when (Preferences[Preferences.Key.Theme]) {
-        is Preferences.Theme.Black,
-        is Preferences.Theme.BlackMediumContrast,
-        is Preferences.Theme.BlackHighContrast,
-        is Preferences.Theme.SystemBlack,
-        is Preferences.Theme.DynamicBlack,
-             -> true
+    get() = Preferences[Preferences.Key.AppTheme].blackOnDark
 
-        else -> false
-    }
+fun getThemeContrast(): Double =
+    Preferences[Preferences.Key.AppTheme].contrast
 
-fun getThemeContrast(): Contrast = when (Preferences[Preferences.Key.Theme]) {
-    is Preferences.Theme.LightMediumContrast,
-    is Preferences.Theme.DarkMediumContrast,
-    is Preferences.Theme.BlackMediumContrast,
-         -> Contrast.Medium
+fun getThemeSeedColor(): Long =
+    Preferences[Preferences.Key.AppTheme].seedColor
 
-    is Preferences.Theme.LightHighContrast,
-    is Preferences.Theme.DarkHighContrast,
-    is Preferences.Theme.BlackHighContrast,
-         -> Contrast.High
-
-    else -> Contrast.Default
-}
+fun getThemePalette(): Int =
+    Preferences[Preferences.Key.AppTheme].paletteStyle
 
 val isDynamicColorsTheme: Boolean
-    get() = when (Preferences[Preferences.Key.Theme]) {
-        is Preferences.Theme.Dynamic,
-        is Preferences.Theme.DynamicLight,
-        is Preferences.Theme.DynamicDark,
-        is Preferences.Theme.DynamicBlack,
-             -> true
-
-        else -> false
-    }
+    get() = Preferences[Preferences.Key.AppTheme].dynamicColor
 
 fun Context.showBatteryOptimizationDialog() {
     AlertDialog.Builder(this)

@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.runtime.Immutable
 import androidx.work.NetworkType
 import com.machiav3lli.fdroid.FILTER_CATEGORY_ALL
 import com.machiav3lli.fdroid.NeoApp
@@ -19,11 +20,15 @@ import com.machiav3lli.fdroid.utils.extension.android.Android
 import com.machiav3lli.fdroid.utils.getHasSystemInstallPermission
 import com.machiav3lli.fdroid.utils.hasShizukuOrSui
 import com.machiav3lli.fdroid.utils.isBiometricLockAvailable
+import com.materialkolor.Contrast
+import com.materialkolor.PaletteStyle
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import java.net.Proxy
 
 data object Preferences : OnSharedPreferenceChangeListener {
@@ -33,7 +38,7 @@ data object Preferences : OnSharedPreferenceChangeListener {
     private val keys = sequenceOf(
         // Personalization
         Key.Language,
-        Key.Theme,
+        Key.AppTheme,
         Key.DefaultTab,
         Key.KidsMode,
         Key.DownloadShowDialog,
@@ -276,6 +281,25 @@ data object Preferences : OnSharedPreferenceChangeListener {
                 return enumClass.enumConstants?.getOrNull(ordinal)
                     ?: enumClass.enumConstants?.first()
                     ?: throw NoSuchElementException("Enum ${enumClass.simpleName} is empty.")
+            }
+        }
+
+        class NeoThemeValue(override val value: NeoTheme) : Value<NeoTheme>() {
+            override fun get(
+                preferences: SharedPreferences,
+                key: String,
+                defaultValue: Value<NeoTheme>,
+            ): NeoTheme {
+                val json = preferences.getString(key, null) ?: return defaultValue.value
+                return try {
+                    Json.decodeFromString<NeoTheme>(json)
+                } catch (_: Exception) {
+                    defaultValue.value
+                }
+            }
+
+            override fun set(preferences: SharedPreferences, key: String, value: NeoTheme) {
+                preferences.edit().putString(key, Json.encodeToString(value)).apply()
             }
         }
     }
@@ -623,6 +647,16 @@ data object Preferences : OnSharedPreferenceChangeListener {
             )
         )
 
+        data object AppTheme : Key<NeoTheme>(
+            "app_theme", Value.NeoThemeValue(
+                when {
+                    Android.sdk(Build.VERSION_CODES.S) -> NeoTheme.DynamicSystem
+                    Android.sdk(Build.VERSION_CODES.Q) -> NeoTheme.SystemBlack
+                    else                               -> NeoTheme.Light
+                }
+            )
+        )
+
         data object DefaultTab : Key<Preferences.DefaultTab>(
             "default_tab_int", Value.EnumerationValue(
                 Preferences.DefaultTab.Latest
@@ -731,6 +765,83 @@ data object Preferences : OnSharedPreferenceChangeListener {
         data object None : ActionLock("none", Order.NAME)
         data object Device : ActionLock("device", Order.DATE_ADDED)
         data object Biometric : ActionLock("biometric", Order.LAST_UPDATE)
+    }
+
+    @Immutable
+    @Serializable
+    sealed class NeoTheme {
+        abstract val resId: Int
+        abstract val nightMode: Int
+        abstract val dynamicColor: Boolean
+        abstract val seedColor: Long
+        abstract val paletteStyle: Int
+        abstract val blackOnDark: Boolean
+        abstract val contrast: Double
+
+        @Serializable
+        data class CustomTheme(
+            override val resId: Int,
+            override val nightMode: Int,
+            override val dynamicColor: Boolean,
+            override val seedColor: Long,
+            override val paletteStyle: Int,
+            override val blackOnDark: Boolean,
+            override val contrast: Double,
+        ) : NeoTheme()
+
+        @Serializable
+        data object DynamicSystem : NeoTheme() {
+            override val resId: Int
+                get() = -1
+            override val nightMode: Int
+                get() = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            override val dynamicColor: Boolean
+                get() = true
+            override val seedColor: Long
+                get() = 0xFF7EDB80
+            override val paletteStyle: Int
+                get() = PaletteStyle.TonalSpot.ordinal
+            override val blackOnDark: Boolean
+                get() = false
+            override val contrast: Double
+                get() = Contrast.Default.value
+        }
+
+        @Serializable
+        data object SystemBlack : NeoTheme() {
+            override val resId: Int
+                get() = R.style.Theme_Main_Amoled
+            override val nightMode: Int
+                get() = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            override val dynamicColor: Boolean
+                get() = false
+            override val seedColor: Long
+                get() = 0xFF7EDB80
+            override val paletteStyle: Int
+                get() = PaletteStyle.TonalSpot.ordinal
+            override val blackOnDark: Boolean
+                get() = true
+            override val contrast: Double
+                get() = Contrast.Default.value
+        }
+
+        @Serializable
+        data object Light : NeoTheme() {
+            override val resId: Int
+                get() = R.style.Theme_Main
+            override val nightMode: Int
+                get() = AppCompatDelegate.MODE_NIGHT_NO
+            override val dynamicColor: Boolean
+                get() = false
+            override val seedColor: Long
+                get() = 0xFF005317
+            override val paletteStyle: Int
+                get() = PaletteStyle.TonalSpot.ordinal
+            override val blackOnDark: Boolean
+                get() = false
+            override val contrast: Double
+                get() = Contrast.Default.value
+        }
     }
 
     sealed class Theme(override val valueString: String) : Enumeration<Theme> {

@@ -23,6 +23,12 @@ fun PrefsBuilder(
             groupSize = size,
         ) { onDialogPref(prefKey) }
 
+        prefKey is Preferences.Key.AppTheme                 -> ThemePreference(
+            prefKey = prefKey as Preferences.Key<Preferences.NeoTheme>,
+            index = index,
+            groupSize = size,
+        ) { onDialogPref(prefKey) }
+
         prefKey is Preferences.Key.DownloadDirectory        -> LaunchPreference(
             prefKey = prefKey as Preferences.Key<String>,
             index = index,

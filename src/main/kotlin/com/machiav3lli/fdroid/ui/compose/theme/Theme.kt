@@ -14,6 +14,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.machiav3lli.fdroid.utils.extension.android.Android
 import com.machiav3lli.fdroid.utils.getThemeContrast
+import com.machiav3lli.fdroid.utils.getThemePalette
+import com.machiav3lli.fdroid.utils.getThemeSeedColor
 import com.machiav3lli.fdroid.utils.isBlackTheme
 import com.machiav3lli.fdroid.utils.isDynamicColorsTheme
 import com.materialkolor.Contrast
@@ -25,17 +27,16 @@ import com.materialkolor.rememberDynamicColorScheme
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     blackTheme: Boolean = isBlackTheme,
-    themeContrast: Contrast = getThemeContrast(),
+    themeContrast: Double = getThemeContrast(),
     content: @Composable () -> Unit,
 ) {
     val staticColorScheme = rememberDynamicColorScheme(
-        seedColor = if (darkTheme) primaryDark
-        else primaryLight,
+        seedColor = Color(getThemeSeedColor()),
         isDark = darkTheme,
         specVersion = ColorSpec.SpecVersion.SPEC_2025,
-        contrastLevel = themeContrast.value,
+        contrastLevel = themeContrast,
         isAmoled = blackTheme,
-        style = PaletteStyle.TonalSpot, // TODO add palette styles pref
+        style = PaletteStyle.entries[getThemePalette()],
     )
 
     MaterialTheme(

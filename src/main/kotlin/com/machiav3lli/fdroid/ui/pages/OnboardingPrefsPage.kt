@@ -33,6 +33,7 @@ import com.machiav3lli.fdroid.ui.dialog.EnumSelectionPrefDialogUI
 import com.machiav3lli.fdroid.ui.dialog.IntInputPrefDialogUI
 import com.machiav3lli.fdroid.ui.dialog.LanguagePrefDialogUI
 import com.machiav3lli.fdroid.ui.dialog.StringInputPrefDialogUI
+import com.machiav3lli.fdroid.ui.dialog.ThemePrefDialogUI
 import com.machiav3lli.fdroid.utils.DOWNLOAD_DIRECTORY_INTENT
 
 @Composable
@@ -48,7 +49,7 @@ fun OnboardingPrefsPage(
     }
     val personalPrefs = listOf(
         Preferences.Key.Language,
-        Preferences.Key.Theme,
+        Preferences.Key.AppTheme,
         Preferences.Key.DefaultTab,
     )
     val layoutPrefs = listOf(
@@ -145,6 +146,10 @@ fun OnboardingPrefsPage(
         } else BaseDialog(openDialogCustom = openDialog) {
             when (dialogPref?.default?.value) {
                 PREFS_LANGUAGE_DEFAULT        -> LanguagePrefDialogUI(
+                    openDialogCustom = openDialog
+                )
+
+                is Preferences.NeoTheme       -> ThemePrefDialogUI(
                     openDialogCustom = openDialog
                 )
 

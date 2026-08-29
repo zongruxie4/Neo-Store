@@ -93,7 +93,7 @@ class NeoApp : Application(), SingletonImageLoader.Factory, KoinStartup {
         DynamicColors.applyToActivitiesIfAvailable(
             this,
             DynamicColorsOptions.Builder()
-                .setPrecondition { _, _ -> Preferences[Preferences.Key.Theme] == Preferences.Theme.Dynamic }
+                .setPrecondition { _, _ -> Preferences[Preferences.Key.AppTheme].dynamicColor }
                 .build()
         )
         if (Android.sdk(Build.VERSION_CODES.P))
@@ -189,7 +189,7 @@ class NeoApp : Application(), SingletonImageLoader.Factory, KoinStartup {
                 Preferences.Key.UpdateUnstable,
                     -> forceSyncAll()
 
-                Preferences.Key.Theme,
+                Preferences.Key.AppTheme,
                     -> {
                     launch(Dispatchers.Main) {
                         mActivity.recreate()
