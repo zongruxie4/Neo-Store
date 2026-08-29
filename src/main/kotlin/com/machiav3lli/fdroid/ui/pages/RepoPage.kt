@@ -55,7 +55,7 @@ import com.machiav3lli.fdroid.ui.components.OutlinedActionButton
 import com.machiav3lli.fdroid.ui.components.QrCodeImage
 import com.machiav3lli.fdroid.ui.components.RoundButton
 import com.machiav3lli.fdroid.ui.components.SelectChip
-import com.machiav3lli.fdroid.ui.components.SwitchPreference
+import com.machiav3lli.fdroid.ui.components.SwitchRow
 import com.machiav3lli.fdroid.ui.components.TitleText
 import com.machiav3lli.fdroid.ui.compose.icons.Phosphor
 import com.machiav3lli.fdroid.ui.compose.icons.phosphor.ArrowSquareOut
@@ -233,7 +233,7 @@ fun RepoPage(
                 contentPadding = PaddingValues(vertical = 16.dp, horizontal = 8.dp)
             ) {
                 item {
-                    SwitchPreference(
+                    SwitchRow(
                         text = stringResource(id = R.string.mirror_rotation),
                         withContainer = true,
                         initSelected = { repo.mirrorRotation },

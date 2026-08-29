@@ -75,7 +75,7 @@ import com.machiav3lli.fdroid.ui.components.ScreenshotItem
 import com.machiav3lli.fdroid.ui.components.ScreenshotList
 import com.machiav3lli.fdroid.ui.components.SegmentedTabButton
 import com.machiav3lli.fdroid.ui.components.SimpleLineChart
-import com.machiav3lli.fdroid.ui.components.SwitchPreference
+import com.machiav3lli.fdroid.ui.components.SwitchRow
 import com.machiav3lli.fdroid.ui.components.appsheet.AppInfoChips
 import com.machiav3lli.fdroid.ui.components.appsheet.AppInfoHeader
 import com.machiav3lli.fdroid.ui.components.appsheet.HtmlTextBlock
@@ -393,7 +393,7 @@ fun AppPage(
                         }
                         item {
                             AnimatedVisibility(visible = appState.canUpdate) {
-                                SwitchPreference(
+                                SwitchRow(
                                     text = stringResource(id = R.string.ignore_this_update),
                                     initSelected = { extraState.extras?.ignoredVersion == eProduct.versionCode },
                                     onCheckedChanged = {
@@ -405,7 +405,7 @@ fun AppPage(
                                 )
                             }
                             AnimatedVisibility(visible = privacyState.isInstalled) {
-                                SwitchPreference(
+                                SwitchRow(
                                     text = stringResource(id = R.string.ignore_all_updates),
                                     initSelected = { extraState.extras?.ignoreUpdates == true },
                                     onCheckedChanged = {
@@ -414,7 +414,7 @@ fun AppPage(
                                 )
                             }
                             AnimatedVisibility(visible = privacyState.isInstalled) {
-                                SwitchPreference(
+                                SwitchRow(
                                     text = stringResource(id = R.string.ignore_vulns),
                                     initSelected = { extraState.extras?.ignoreVulns == true },
                                     onCheckedChanged = {
@@ -423,7 +423,7 @@ fun AppPage(
                                 )
                             }
                             AnimatedVisibility(visible = privacyState.isInstalled) {
-                                SwitchPreference(
+                                SwitchRow(
                                     text = stringResource(id = R.string.allow_unstable_updates),
                                     initSelected = { extraState.extras?.allowUnstable == true },
                                     onCheckedChanged = {
