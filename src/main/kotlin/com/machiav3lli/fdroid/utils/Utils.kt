@@ -21,6 +21,7 @@ import android.provider.Settings
 import android.text.format.DateUtils
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.biometric.BiometricManager
 import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
@@ -49,6 +50,7 @@ import com.machiav3lli.fdroid.ui.compose.icons.phosphor.Copyleft
 import com.machiav3lli.fdroid.ui.compose.icons.phosphor.GlobeSimple
 import com.machiav3lli.fdroid.ui.compose.icons.phosphor.Translate
 import com.machiav3lli.fdroid.ui.compose.icons.phosphor.User
+import com.machiav3lli.fdroid.ui.compose.theme.presetColors
 import com.machiav3lli.fdroid.ui.dialog.LaunchDialog
 import com.machiav3lli.fdroid.utils.extension.android.Android
 import com.machiav3lli.fdroid.utils.extension.android.signerSHA256Signatures
@@ -203,6 +205,42 @@ object Utils {
         )
 
         else -> Locale(localeCode)
+    }
+
+    fun Context.themeSummary(theme: Preferences.NeoTheme): String {
+        val nightModeStr = when (theme.nightMode) {
+            AppCompatDelegate.MODE_NIGHT_NO
+                 -> getString(R.string.light)
+
+            AppCompatDelegate.MODE_NIGHT_YES
+                 -> getString(R.string.dark)
+
+            else -> getString(R.string.system)
+        }
+
+        if (theme.dynamicColor) return "${getString(R.string.dynamic_theme)} $nightModeStr"
+
+        val colorStr = getString(
+            presetColors[theme.seedColor]
+                ?: R.string.color_green
+        )
+
+        val base = if (theme.blackOnDark && isDarkTheme) {
+            "${getString(R.string.amoled)} $colorStr"
+        } else {
+            "$nightModeStr $colorStr"
+        }
+
+        return if (theme.contrast != Contrast.Default.value) {
+            val contrastStr = when (theme.contrast) {
+                Contrast.Medium.value -> getString(R.string.contrast_medium)
+                Contrast.High.value   -> getString(R.string.contrast_high)
+                else                  -> getString(R.string.contrast_default)
+            }
+            "$base ($contrastStr)"
+        } else {
+            base
+        }
     }
 
     /**

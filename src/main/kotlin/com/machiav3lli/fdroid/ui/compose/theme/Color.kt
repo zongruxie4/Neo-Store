@@ -1,9 +1,20 @@
 package com.machiav3lli.fdroid.ui.compose.theme
 
 import androidx.compose.ui.graphics.Color
+import com.machiav3lli.fdroid.R
 
 val Orange = Color(0xFFFF9138)
 val LightGreen = Color(0xFFAEC300)
+
+val presetColors = mapOf(
+    0xFF33DD55 to R.string.color_green,
+    0xFF3344AA to R.string.color_blue,
+    0xFF6644FF to R.string.color_purple,
+    0xFF00BBBB to R.string.color_teal,
+    0xFFFF8811 to R.string.color_orange,
+    0xFFFFBBCC to R.string.color_pink,
+    0xFFCC0044 to R.string.color_red,
+)
 
 // Light Themes
 

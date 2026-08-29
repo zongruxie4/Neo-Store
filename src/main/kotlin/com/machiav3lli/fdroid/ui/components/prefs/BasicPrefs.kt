@@ -35,6 +35,7 @@ import com.machiav3lli.fdroid.data.content.PrefsEntries
 import com.machiav3lli.fdroid.ui.compose.utils.addIf
 import com.machiav3lli.fdroid.utils.Utils
 import com.machiav3lli.fdroid.utils.Utils.getLocaleOfCode
+import com.machiav3lli.fdroid.utils.Utils.themeSummary
 import com.topjohnwu.superuser.Shell
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -213,6 +214,54 @@ fun LanguagePreference(
         modifier = modifier,
         titleId = NonBooleanPrefsMeta[prefKey]?.first ?: -1,
         summary = Utils.translateLocale(context.getLocaleOfCode(Preferences[prefKey])),
+        index = index,
+        groupSize = groupSize,
+        isEnabled = isEnabled,
+        startWidget = NonBooleanPrefsMeta[prefKey]?.second?.let {
+            {
+                Icon(
+                    imageVector = it,
+                    contentDescription = stringResource(
+                        id = NonBooleanPrefsMeta[prefKey]?.first ?: -1
+                    ),
+                )
+            }
+        },
+        onClick = onClick
+    )
+}
+
+@Composable
+fun ThemePreference(
+    modifier: Modifier = Modifier,
+    prefKey: Preferences.Key<Preferences.NeoTheme>,
+    index: Int = 1,
+    groupSize: Int = 1,
+    onClick: (() -> Unit) = {},
+) {
+    val context = LocalContext.current
+    val dependency = PrefsDependencies[prefKey]
+    var isEnabled by remember {
+        mutableStateOf(
+            dependency?.let { Preferences[dependency.first] in dependency.second }
+                ?: true)
+    }
+
+    SideEffect {
+        CoroutineScope(Dispatchers.Default).launch {
+            Preferences.addPreferencesChangeListener {
+                when (it) {
+                    dependency?.first -> isEnabled = Preferences[it] in dependency.second
+                    else              -> {}
+                }
+            }
+        }
+    }
+
+    BasePreference(
+        modifier = modifier,
+        titleId = NonBooleanPrefsMeta[prefKey]?.first ?: -1,
+        summary = context.themeSummary(Preferences[prefKey]),
         index = index,
         groupSize = groupSize,
         isEnabled = isEnabled,
