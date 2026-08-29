@@ -89,7 +89,6 @@ fun RepositoryItem(
         trailingContent = {
             Switch(
                 checked = isEnabled,
-                colors = SwitchDefaults.colors(uncheckedBorderColor = Color.Transparent),
                 onCheckedChange = {
                     enable(!isEnabled)
                     onSwitch(repository)

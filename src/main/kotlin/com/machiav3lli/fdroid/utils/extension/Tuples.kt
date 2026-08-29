@@ -1,5 +1,8 @@
 package com.machiav3lli.fdroid.utils.extension
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class Quadruple<A, B, C, D>(
     val first: A,
     val second: B,
@@ -12,6 +15,7 @@ operator fun <A, B, C, D> Quadruple<A, B, C, D>.component2() = second
 operator fun <A, B, C, D> Quadruple<A, B, C, D>.component3() = third
 operator fun <A, B, C, D> Quadruple<A, B, C, D>.component4() = fourth
 
+@Immutable
 data class Quintuple<A, B, C, D, E>(
     val first: A,
     val second: B,

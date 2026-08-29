@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -41,6 +42,17 @@ class ExploreVM(
             initialValue = emptyMap()
         )
 
+    private val categories = combine(
+        productsRepo.getAllCategories(),
+        productsRepo.getAllCategoryDetails(),
+    ) { cats, catDetails ->
+        cats.map { cat ->
+            catDetails.find { it.name == cat }
+                ?: CategoryDetails(cat, cat)
+        }
+    }
+        .distinctUntilChanged()
+
     private val topApps = topAppType.flatMapLatest {
         when (it) {
             TopDownloadType.TOTAL_ALLTIME -> productsRepo.getAllTimeTopApps()
@@ -51,27 +63,21 @@ class ExploreVM(
 
     val categoryProductsState: StateFlow<CategoryProductsState> = combine(
         sortFilter,
-        combine(
-            productsRepo.getAllCategories(),
-            productsRepo.getAllCategoryDetails(),
-        ) { cats, catDetails ->
-            cats.map { cat ->
-                catDetails.find { it.name == cat }
-                    ?: CategoryDetails(cat, cat)
-            }
-        },
+        categories,
         source,
         installed,
         extrasRepo.getAll(),
     ) { sortFilter, categories, src, installed, extras ->
+        val request = when (src) {
+            Source.AVAILABLE -> Request.All
+            Source.FAVORITES -> Request.Favorites
+            else             -> Request.None
+        }
+
         Quintuple(
             sortFilter,
             categories,
-            when (src) {
-                Source.AVAILABLE -> Request.All
-                Source.FAVORITES -> Request.Favorites
-                else             -> Request.None
-            },
+            request,
             installed,
             extras,
         )

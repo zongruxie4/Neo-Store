@@ -30,30 +30,6 @@ enum class InstallerType(@StringRes val titleResId: Int) {
     SHIZUKU(R.string.shizuku_installer),
 }
 
-enum class Contrast(val themes: List<Preferences.Theme>) {
-    NORMAL(
-        listOf(
-            Preferences.Theme.Light,
-            Preferences.Theme.Dark,
-            Preferences.Theme.Black
-        )
-    ),
-    MEDIUM(
-        listOf(
-            Preferences.Theme.LightMediumContrast,
-            Preferences.Theme.DarkMediumContrast,
-            Preferences.Theme.BlackMediumContrast
-        )
-    ),
-    HIGH(
-        listOf(
-            Preferences.Theme.LightHighContrast,
-            Preferences.Theme.DarkHighContrast,
-            Preferences.Theme.BlackHighContrast
-        )
-    )
-}
-
 enum class Order(@StringRes val titleResId: Int, val icon: ImageVector) {
     NAME(R.string.name, Phosphor.TagSimple),
     DATE_ADDED(R.string.date_added, Phosphor.CalendarX),
