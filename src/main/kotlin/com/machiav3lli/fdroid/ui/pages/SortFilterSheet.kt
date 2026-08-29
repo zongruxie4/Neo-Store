@@ -39,6 +39,7 @@ import com.machiav3lli.fdroid.data.entity.AndroidVersion
 import com.machiav3lli.fdroid.data.entity.ColoringState
 import com.machiav3lli.fdroid.data.entity.toAntiFeature
 import com.machiav3lli.fdroid.ui.components.ActionButton
+import com.machiav3lli.fdroid.ui.components.ChipsRange
 import com.machiav3lli.fdroid.ui.components.ChipsSwitch
 import com.machiav3lli.fdroid.ui.components.DeSelectAll
 import com.machiav3lli.fdroid.ui.components.ExpandableItemsBlock
@@ -53,6 +54,7 @@ import com.machiav3lli.fdroid.ui.navigation.NavItem
 import com.machiav3lli.fdroid.utils.extension.koinNeoViewModel
 import com.machiav3lli.fdroid.utils.extension.text.nullIfEmpty
 import com.machiav3lli.fdroid.viewmodels.MainVM
+import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 // TODO add own? viewmodel
@@ -106,17 +108,29 @@ fun SortFilterSheet(
         NavItem.Search.destination    -> Preferences.Key.LicensesFilterSearch
         else                          -> Preferences.Key.LicensesFilterExplore // NavItem.Explore
     }
-    val minSDKFilterKey = when (navPage) {
-        NavItem.Latest.destination    -> Preferences.Key.MinSDKLatest
-        NavItem.Installed.destination -> Preferences.Key.MinSDKInstalled
-        NavItem.Search.destination    -> Preferences.Key.MinSDKSearch
-        else                          -> Preferences.Key.MinSDKExplore // NavItem.Explore
+    val minMinSDKFilterKey = when (navPage) {
+        NavItem.Latest.destination    -> Preferences.Key.MinMinSDKLatest
+        NavItem.Installed.destination -> Preferences.Key.MinMinSDKInstalled
+        NavItem.Search.destination    -> Preferences.Key.MinMinSDKSearch
+        else                          -> Preferences.Key.MinMinSDKExplore // NavItem.Explore
     }
-    val targetSDKFilterKey = when (navPage) {
-        NavItem.Latest.destination    -> Preferences.Key.TargetSDKLatest
-        NavItem.Installed.destination -> Preferences.Key.TargetSDKInstalled
-        NavItem.Search.destination    -> Preferences.Key.TargetSDKSearch
-        else                          -> Preferences.Key.TargetSDKExplore // NavItem.Explore
+    val maxMinSDKFilterKey = when (navPage) {
+        NavItem.Latest.destination    -> Preferences.Key.MaxMinSDKLatest
+        NavItem.Installed.destination -> Preferences.Key.MaxMinSDKInstalled
+        NavItem.Search.destination    -> Preferences.Key.MaxMinSDKSearch
+        else                          -> Preferences.Key.MaxMinSDKExplore // NavItem.Explore
+    }
+    val minTargetSDKFilterKey = when (navPage) {
+        NavItem.Latest.destination    -> Preferences.Key.MinTargetSDKLatest
+        NavItem.Installed.destination -> Preferences.Key.MinTargetSDKInstalled
+        NavItem.Search.destination    -> Preferences.Key.MinTargetSDKSearch
+        else                          -> Preferences.Key.MinTargetSDKExplore // NavItem.Explore
+    }
+    val maxTargetSDKFilterKey = when (navPage) {
+        NavItem.Latest.destination    -> Preferences.Key.MaxTargetSDKLatest
+        NavItem.Installed.destination -> Preferences.Key.MaxTargetSDKInstalled
+        NavItem.Search.destination    -> Preferences.Key.MaxTargetSDKSearch
+        else                          -> Preferences.Key.MaxTargetSDKExplore // NavItem.Explore
     }
 
     var sortOption by remember(Preferences[sortKey]) {
@@ -137,11 +151,17 @@ fun SortFilterSheet(
     val filteredLicenses = remember(Preferences[licensesFilterKey]) {
         mutableStateListOf(*Preferences[licensesFilterKey].toTypedArray())
     }
-    var filterMinSDK by remember(Preferences[minSDKFilterKey]) {
-        mutableStateOf(Preferences[minSDKFilterKey])
+    var filterMinMinSDK by remember(Preferences[minMinSDKFilterKey]) {
+        mutableStateOf(Preferences[minMinSDKFilterKey])
     }
-    var filterTargetSDK by remember(Preferences[targetSDKFilterKey]) {
-        mutableStateOf(Preferences[targetSDKFilterKey])
+    var filterMaxMinSDK by remember(Preferences[maxMinSDKFilterKey]) {
+        mutableStateOf(Preferences[maxMinSDKFilterKey])
+    }
+    var filterMinTargetSDK by remember(Preferences[minTargetSDKFilterKey]) {
+        mutableStateOf(Preferences[minTargetSDKFilterKey])
+    }
+    var filterMaxTargetSDK by remember(Preferences[maxTargetSDKFilterKey]) {
+        mutableStateOf(Preferences[maxTargetSDKFilterKey])
     }
 
     Scaffold(
@@ -171,6 +191,10 @@ fun SortFilterSheet(
                         Preferences[categoriesFilterKey] = categoriesFilterKey.default.value
                         Preferences[antifeaturesFilterKey] = antifeaturesFilterKey.default.value
                         Preferences[licensesFilterKey] = licensesFilterKey.default.value
+                        Preferences[minMinSDKFilterKey] = minMinSDKFilterKey.default.value
+                        Preferences[maxMinSDKFilterKey] = maxMinSDKFilterKey.default.value
+                        Preferences[minTargetSDKFilterKey] = minTargetSDKFilterKey.default.value
+                        Preferences[maxTargetSDKFilterKey] = maxTargetSDKFilterKey.default.value
                         onDismiss()
                     }
                     ActionButton(
@@ -185,8 +209,10 @@ fun SortFilterSheet(
                             Preferences[categoriesFilterKey] = filterCategory
                             Preferences[antifeaturesFilterKey] = filteredAntifeatures.toSet()
                             Preferences[licensesFilterKey] = filteredLicenses.toSet()
-                            Preferences[minSDKFilterKey] = filterMinSDK
-                            Preferences[targetSDKFilterKey] = filterTargetSDK
+                            Preferences[minMinSDKFilterKey] = filterMinMinSDK
+                            Preferences[maxMinSDKFilterKey] = filterMaxMinSDK
+                            Preferences[minTargetSDKFilterKey] = filterMinTargetSDK
+                            Preferences[maxTargetSDKFilterKey] = filterMaxTargetSDK
                             onDismiss()
                         }
                     )
@@ -294,43 +320,33 @@ fun SortFilterSheet(
             item {
                 ExpandableItemsBlock(
                     heading = stringResource(id = R.string.min_android),
-                    preExpanded = filterMinSDK != AndroidVersion.Unknown,
+                    preExpanded = filterMinMinSDK != AndroidVersion.Unknown ||
+                            filterMaxMinSDK != AndroidVersion.Unknown,
                 ) {
-                    FlowRow(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        AndroidVersion.entries.forEach {
-                            SelectChip(
-                                text = it.valueString,
-                                checked = it == filterMinSDK,
-                                alwaysShowIcon = false,
-                            ) {
-                                filterMinSDK = it
-                            }
-                        }
-                    }
+                    ChipsRange(
+                        firstValue = filterMinMinSDK to filterMinMinSDK.valueString,
+                        secondValue = filterMaxMinSDK to filterMaxMinSDK.valueString,
+                        values = AndroidVersion.entries.associateWith { it.valueString }
+                            .toPersistentMap(),
+                        onSelectFirst = { filterMinMinSDK = it },
+                        onSelectSecond = { filterMaxMinSDK = it },
+                    )
                 }
             }
             item {
                 ExpandableItemsBlock(
                     heading = stringResource(id = R.string.target_android),
-                    preExpanded = filterTargetSDK != AndroidVersion.Unknown,
+                    preExpanded = filterMinTargetSDK != AndroidVersion.Unknown ||
+                            filterMaxTargetSDK != AndroidVersion.Unknown,
                 ) {
-                    FlowRow(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        AndroidVersion.entries.forEach {
-                            SelectChip(
-                                text = it.valueString,
-                                checked = it == filterTargetSDK,
-                                alwaysShowIcon = false,
-                            ) {
-                                filterTargetSDK = it
-                            }
-                        }
-                    }
+                    ChipsRange(
+                        firstValue = filterMinTargetSDK to filterMinTargetSDK.valueString,
+                        secondValue = filterMaxTargetSDK to filterMaxTargetSDK.valueString,
+                        values = AndroidVersion.entries.associateWith { it.valueString }
+                            .toPersistentMap(),
+                        onSelectFirst = { filterMinTargetSDK = it },
+                        onSelectSecond = { filterMaxTargetSDK = it },
+                    )
                 }
             }
             item {
