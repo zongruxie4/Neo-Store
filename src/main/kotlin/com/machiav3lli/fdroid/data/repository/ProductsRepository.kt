@@ -69,6 +69,12 @@ class ProductsRepository(
     fun getIconDetailsMap(): Flow<Map<String, ProductIconDetails>> =
         productsDao.getIconDetailsMapFlow()
 
+    suspend fun loadIconDetailsList(): List<ProductIconDetails> =
+        productsDao.getIconDetailsList()
+
+    fun getIconDetailsList(): Flow<List<ProductIconDetails>> =
+        productsDao.getIconDetailsListFlow()
+
     suspend fun loadList(
         installed: Boolean,
         updates: Boolean,

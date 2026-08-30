@@ -91,6 +91,12 @@ interface ProductDao : BaseDao<Product> {
     @Query("SELECT * FROM producticondetails")
     fun getIconDetailsMapFlow(): Flow<Map<@MapColumn(columnName = ROW_PACKAGE_NAME) String, ProductIconDetails>>
 
+    @Query("SELECT * FROM producticondetails ORDER BY $ROW_LABEL ASC")
+    suspend fun getIconDetailsList(): List<ProductIconDetails>
+
+    @Query("SELECT * FROM producticondetails ORDER BY $ROW_LABEL ASC")
+    fun getIconDetailsListFlow(): Flow<List<ProductIconDetails>>
+
     @Query("DELETE FROM $TABLE_PRODUCT WHERE repositoryId = :id")
     suspend fun deleteById(id: Long)
 

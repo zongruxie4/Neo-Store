@@ -526,4 +526,5 @@
     <string name="color_pink">Pink</string>
     <string name="color_red">Red</string>
     <string name="packages_blocklist">Apps block list</string>
+    <string name="apps_num_FORMAT">%d apps</string>
 </resources>

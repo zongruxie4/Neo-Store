@@ -32,6 +32,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,10 +58,13 @@ import com.machiav3lli.fdroid.ui.components.prefs.BasePreference
 import com.machiav3lli.fdroid.ui.components.prefs.PreferenceGroup
 import com.machiav3lli.fdroid.ui.compose.icons.Phosphor
 import com.machiav3lli.fdroid.ui.compose.icons.phosphor.CircleWavyWarning
+import com.machiav3lli.fdroid.ui.dialog.BaseDialog
+import com.machiav3lli.fdroid.ui.dialog.GlobalBlockListDialogUI
 import com.machiav3lli.fdroid.utils.currentTimestamp
 import com.machiav3lli.fdroid.utils.extension.koinNeoViewModel
 import com.machiav3lli.fdroid.utils.isDefaultAppHandler
 import com.machiav3lli.fdroid.viewmodels.PrefsVM
+import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -74,6 +78,13 @@ fun PrefsOtherPage(
     val scope = rememberCoroutineScope()
     val hidingCounter = rememberSaveable { mutableIntStateOf(0) }
     val pageState by viewModel.otherPrefsState.collectAsStateWithLifecycle()
+    val allPackages by productRepo.getIconDetailsList().collectAsStateWithLifecycle(emptyList())
+    val openDialog = remember { mutableStateOf(false) }
+    var dialogPref by remember { mutableStateOf<Preferences.Key<*>?>(null) }
+    val onPrefDialog = { pref: Preferences.Key<*> ->
+        dialogPref = pref
+        openDialog.value = true
+    }
 
     val startExportExtrasResult =
         rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument(SAFFile.EXTRAS_MIME_TYPE)) { resultUri ->
@@ -314,7 +325,7 @@ fun PrefsOtherPage(
                 BasePreference(
                     titleId = R.string.extras_export,
                     index = 0,
-                    groupSize = 6,
+                    groupSize = 7,
                     onClick = {
                         startExportExtrasResult
                             .launch("NS_$currentTimestamp.${SAFFile.EXTRAS_EXTENSION}")
@@ -324,7 +335,7 @@ fun PrefsOtherPage(
                 BasePreference(
                     titleId = R.string.extras_import,
                     index = 1,
-                    groupSize = 6,
+                    groupSize = 7,
                     onClick = {
                         startImportExtrasResult.launch(SAFFile.EXTRAS_MIME_ARRAY)
                     }
@@ -333,7 +344,7 @@ fun PrefsOtherPage(
                 BasePreference(
                     titleId = R.string.repos_export,
                     index = 2,
-                    groupSize = 6,
+                    groupSize = 7,
                     onClick = {
                         startExportReposResult
                             .launch("NS_$currentTimestamp.${SAFFile.REPOS_EXTENSION}")
@@ -343,7 +354,7 @@ fun PrefsOtherPage(
                 BasePreference(
                     titleId = R.string.repos_import,
                     index = 3,
-                    groupSize = 6,
+                    groupSize = 7,
                     onClick = {
                         startImportReposResult.launch(SAFFile.REPOS_MIME_ARRAY)
                     }
@@ -352,7 +363,7 @@ fun PrefsOtherPage(
                 BasePreference(
                     titleId = R.string.installed_export,
                     index = 4,
-                    groupSize = 6,
+                    groupSize = 7,
                     onClick = {
                         startExportInstalledResult
                             .launch("NS_$currentTimestamp.${SAFFile.APPS_EXTENSION}")
@@ -362,15 +373,47 @@ fun PrefsOtherPage(
                 BasePreference(
                     titleId = R.string.installed_import,
                     index = 5,
-                    groupSize = 6,
+                    groupSize = 7,
                     onClick = {
                         startImportInstalledResult.launch(SAFFile.APPS_MIME_ARRAY)
+                    }
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                BasePreference(
+                    titleId = R.string.packages_blocklist,
+                    summary = stringResource(
+                        R.string.apps_num_FORMAT,
+                        Preferences[Preferences.Key.PackagesBlocklist].size
+                    ),
+                    index = 6,
+                    groupSize = 7,
+                    onClick = {
+                        onPrefDialog(Preferences.Key.PackagesBlocklist)
                     }
                 )
             }
         }
         item {
             Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+
+    if (openDialog.value) {
+        BaseDialog(openDialogCustom = openDialog) {
+            when (dialogPref) {
+                is Preferences.Key.PackagesBlocklist
+                    -> GlobalBlockListDialogUI(
+                    openDialogCustom = openDialog,
+                    currentBlocklist = Preferences[Preferences.Key.PackagesBlocklist]
+                        .toPersistentSet(),
+                    allPackages = allPackages.toPersistentSet(),
+                    onPackagesListChanged = {
+                        Preferences[Preferences.Key.PackagesBlocklist] = it
+                    },
+                )
+
+                else -> {}
+            }
         }
     }
 }
