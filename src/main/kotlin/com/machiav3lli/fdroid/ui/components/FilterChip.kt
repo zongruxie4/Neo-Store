@@ -15,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -23,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.SelectableChipColors
+import androidx.compose.material3.SelectableDropdownMenuItem
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -311,7 +311,7 @@ fun <T> ChipsRange(
                 shape = MaterialTheme.shapes.extraLarge,
             ) {
                 values.forEach { (value, label) ->
-                    DropdownMenuItem(
+                    SelectableDropdownMenuItem(
                         text = { Text(label) },
                         selected = value == firstValue.first,
                         colors = MenuDefaults.selectableItemColors(
@@ -367,7 +367,7 @@ fun <T> ChipsRange(
                 shape = MaterialTheme.shapes.extraLarge,
             ) {
                 values.forEach { (value, label) ->
-                    DropdownMenuItem(
+                    SelectableDropdownMenuItem(
                         text = { Text(label) },
                         selected = value == secondValue.first,
                         colors = MenuDefaults.selectableItemColors(

@@ -69,7 +69,7 @@ class ExploreVM(
         extrasRepo.getAll(),
     ) { sortFilter, categories, src, installed, extras ->
         val request = when (src) {
-            Source.AVAILABLE -> Request.All
+            Source.AVAILABLE -> Request.EXPLORE
             Source.FAVORITES -> Request.Favorites
             else             -> Request.None
         }

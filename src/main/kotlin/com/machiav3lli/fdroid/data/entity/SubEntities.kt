@@ -222,7 +222,23 @@ data class Request(
     val maxTargetSDK: Int = 0,
 ) {
     companion object {
-        val All: Request
+        val ALL: Request
+            get() = Request(
+                id = Source.AVAILABLE.ordinal,
+                installed = false,
+                updates = false,
+                updateCategory = UpdateCategory.ALL,
+                section = Section.All,
+                order = Order.NAME,
+                ascending = true,
+                category = FILTER_CATEGORY_ALL,
+                filteredOutRepos = emptySet(),
+                filteredAntiFeatures = emptySet(),
+                filteredLicenses = emptySet(),
+                filteredPackages = emptySet(),
+            )
+
+        val EXPLORE: Request
             get() = Request(
                 id = Source.AVAILABLE.ordinal,
                 installed = false,
