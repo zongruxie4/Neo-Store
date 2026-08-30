@@ -214,6 +214,7 @@ data class Request(
     val filteredOutRepos: Set<String>,
     val filteredAntiFeatures: Set<String>,
     val filteredLicenses: Set<String>,
+    val filteredPackages: Set<String>,
     val numberOfItems: Int = 0,
     val minMinSDK: Int = 0,
     val maxMinSDK: Int = 0,
@@ -234,6 +235,7 @@ data class Request(
                 filteredOutRepos = Preferences[Preferences.Key.ReposFilterExplore],
                 filteredAntiFeatures = Preferences[Preferences.Key.AntifeaturesFilterExplore],
                 filteredLicenses = Preferences[Preferences.Key.LicensesFilterExplore],
+                filteredPackages = Preferences[Preferences.Key.PackagesBlocklist],
                 minMinSDK = Preferences[Preferences.Key.MinMinSDKExplore].ordinal,
                 maxMinSDK = Preferences[Preferences.Key.MaxMinSDKExplore].ordinal,
                 minTargetSDK = Preferences[Preferences.Key.MinTargetSDKExplore].ordinal,
@@ -253,6 +255,7 @@ data class Request(
                 filteredOutRepos = Preferences[Preferences.Key.ReposFilterExplore],
                 filteredAntiFeatures = Preferences[Preferences.Key.AntifeaturesFilterExplore],
                 filteredLicenses = Preferences[Preferences.Key.LicensesFilterExplore],
+                filteredPackages = Preferences[Preferences.Key.PackagesBlocklist],
             )
 
         val Search: Request
@@ -268,6 +271,7 @@ data class Request(
                 filteredOutRepos = Preferences[Preferences.Key.ReposFilterSearch],
                 filteredAntiFeatures = Preferences[Preferences.Key.AntifeaturesFilterSearch],
                 filteredLicenses = Preferences[Preferences.Key.LicensesFilterSearch],
+                filteredPackages = Preferences[Preferences.Key.PackagesBlocklist],
                 minMinSDK = Preferences[Preferences.Key.MinMinSDKSearch].ordinal,
                 maxMinSDK = Preferences[Preferences.Key.MaxMinSDKSearch].ordinal,
                 minTargetSDK = Preferences[Preferences.Key.MinTargetSDKSearch].ordinal,
@@ -287,6 +291,7 @@ data class Request(
                 filteredOutRepos = Preferences[Preferences.Key.ReposFilterSearch],
                 filteredAntiFeatures = Preferences[Preferences.Key.AntifeaturesFilterSearch],
                 filteredLicenses = Preferences[Preferences.Key.LicensesFilterSearch],
+                filteredPackages = Preferences[Preferences.Key.PackagesBlocklist],
                 minMinSDK = Preferences[Preferences.Key.MinMinSDKSearch].ordinal,
                 maxMinSDK = Preferences[Preferences.Key.MaxMinSDKSearch].ordinal,
                 minTargetSDK = Preferences[Preferences.Key.MinTargetSDKSearch].ordinal,
@@ -306,6 +311,7 @@ data class Request(
                 filteredOutRepos = Preferences[Preferences.Key.ReposFilterInstalled],
                 filteredAntiFeatures = Preferences[Preferences.Key.AntifeaturesFilterInstalled],
                 filteredLicenses = Preferences[Preferences.Key.LicensesFilterInstalled],
+                filteredPackages = Preferences[Preferences.Key.PackagesBlocklist],
                 minMinSDK = Preferences[Preferences.Key.MinMinSDKInstalled].ordinal,
                 maxMinSDK = Preferences[Preferences.Key.MaxMinSDKInstalled].ordinal,
                 minTargetSDK = Preferences[Preferences.Key.MinTargetSDKInstalled].ordinal,
@@ -325,6 +331,7 @@ data class Request(
                 filteredOutRepos = Preferences[Preferences.Key.ReposFilterSearch],
                 filteredAntiFeatures = Preferences[Preferences.Key.AntifeaturesFilterSearch],
                 filteredLicenses = Preferences[Preferences.Key.LicensesFilterSearch],
+                filteredPackages = Preferences[Preferences.Key.PackagesBlocklist],
                 minMinSDK = Preferences[Preferences.Key.MinMinSDKSearch].ordinal,
                 maxMinSDK = Preferences[Preferences.Key.MaxMinSDKSearch].ordinal,
                 minTargetSDK = Preferences[Preferences.Key.MinTargetSDKSearch].ordinal,
@@ -344,6 +351,7 @@ data class Request(
                 filteredOutRepos = emptySet(),
                 filteredAntiFeatures = emptySet(),
                 filteredLicenses = emptySet(),
+                filteredPackages = Preferences[Preferences.Key.PackagesBlocklist],
             )
 
         val Updated: Request
@@ -360,6 +368,7 @@ data class Request(
                 filteredOutRepos = Preferences[Preferences.Key.ReposFilterLatest],
                 filteredAntiFeatures = Preferences[Preferences.Key.AntifeaturesFilterLatest],
                 filteredLicenses = Preferences[Preferences.Key.LicensesFilterLatest],
+                filteredPackages = Preferences[Preferences.Key.PackagesBlocklist],
                 numberOfItems = Preferences[Preferences.Key.UpdatedApps],
                 minMinSDK = Preferences[Preferences.Key.MinMinSDKLatest].ordinal,
                 maxMinSDK = Preferences[Preferences.Key.MaxMinSDKLatest].ordinal,
@@ -380,6 +389,7 @@ data class Request(
                 filteredOutRepos = emptySet(),
                 filteredAntiFeatures = emptySet(),
                 filteredLicenses = emptySet(),
+                filteredPackages = Preferences[Preferences.Key.PackagesBlocklist],
                 numberOfItems = Preferences[Preferences.Key.NewApps],
                 minMinSDK = Preferences[Preferences.Key.MinMinSDKLatest].ordinal,
                 maxMinSDK = Preferences[Preferences.Key.MaxMinSDKLatest].ordinal,
@@ -399,6 +409,7 @@ data class Request(
                 category = Preferences[Preferences.Key.CategoriesFilterSearch],
                 filteredOutRepos = Preferences[Preferences.Key.ReposFilterSearch],
                 filteredAntiFeatures = Preferences[Preferences.Key.AntifeaturesFilterSearch],
+                filteredPackages = Preferences[Preferences.Key.PackagesBlocklist],
                 filteredLicenses = Preferences[Preferences.Key.LicensesFilterSearch],
                 minMinSDK = Preferences[Preferences.Key.MinMinSDKSearch].ordinal,
                 maxMinSDK = Preferences[Preferences.Key.MaxMinSDKSearch].ordinal,
@@ -419,6 +430,7 @@ data class Request(
                 filteredOutRepos = emptySet(),
                 filteredAntiFeatures = emptySet(),
                 filteredLicenses = emptySet(),
+                filteredPackages = Preferences[Preferences.Key.PackagesBlocklist],
                 numberOfItems = 0,
             )
     }

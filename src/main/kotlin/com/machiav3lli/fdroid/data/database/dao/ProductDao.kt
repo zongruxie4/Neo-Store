@@ -151,6 +151,7 @@ interface ProductDao : BaseDao<Product> {
             category = request.category,
             filteredAntiFeatures = request.filteredAntiFeatures,
             filteredLicenses = request.filteredLicenses,
+            blocklistedPackages = request.filteredPackages,
             order = request.order,
             ascending = request.ascending,
             numberOfItems = request.numberOfItems,
@@ -183,6 +184,7 @@ interface ProductDao : BaseDao<Product> {
         filteredAntiFeatures: Set<String> = emptySet(),
         filteredLicenses: Set<String> = emptySet(),
         specificPackages: Set<String> = emptySet(),
+        blocklistedPackages: Set<String> = emptySet(),
         order: Order,
         ascending: Boolean = false,
         numberOfItems: Int = 0,
@@ -282,6 +284,14 @@ interface ProductDao : BaseDao<Product> {
             whereConditions.add(
                 "$TABLE_PRODUCT.$ROW_PACKAGE_NAME IN (${
                     specificPackages.joinToString(",", transform = { "'$it'" })
+                })"
+            )
+        }
+
+        if (blocklistedPackages.isNotEmpty()) {
+            whereConditions.add(
+                "$TABLE_PRODUCT.$ROW_PACKAGE_NAME NOT IN (${
+                    blocklistedPackages.joinToString(",", transform = { "'$it'" })
                 })"
             )
         }
