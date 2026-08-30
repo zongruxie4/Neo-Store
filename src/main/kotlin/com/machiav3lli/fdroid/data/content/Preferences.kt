@@ -78,6 +78,7 @@ data object Preferences : OnSharedPreferenceChangeListener {
         Key.DisableAutoupdateOnNonReproducibleBuilds,
         Key.RBProvider,
         Key.DLStatsProvider,
+        Key.PackagesBlocklist,
         // Installation
         Key.KeepInstallNotification,
         Key.Installer,
@@ -444,6 +445,11 @@ data object Preferences : OnSharedPreferenceChangeListener {
                 "root_allow_low_target_sdk",
                 Value.BooleanValue(false)
             )
+
+        data object PackagesBlocklist : Key<Set<String>>(
+            "packages_blocklist",
+            Value.StringSetValue(emptySet())
+        )
 
         data object SortOrderExplore : Key<SortOrder>(
             "sort_order_explore",
