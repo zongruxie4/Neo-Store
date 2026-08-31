@@ -356,7 +356,7 @@ fun ExplorePage(
                                         context.launchView(LINK_IOD_DLSTATS)
                                     }
                                 },
-                                headlineContent = {
+                                content = {
                                     Text(
                                         text = stringResource(R.string.top_apps_notice),
                                         textAlign = TextAlign.Center,

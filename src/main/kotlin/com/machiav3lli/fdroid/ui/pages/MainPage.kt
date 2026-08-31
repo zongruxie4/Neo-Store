@@ -211,7 +211,7 @@ fun MainPage(
                                         contentDescription = stringResource(R.string.keep_android_open),
                                     )
                                 },
-                                headlineContent = {
+                                content = {
                                     Text(
                                         text = stringResource(R.string.keep_android_open_notice),
                                         style = MaterialTheme.typography.bodyMedium,

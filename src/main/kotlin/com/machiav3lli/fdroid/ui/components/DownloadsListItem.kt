@@ -65,9 +65,11 @@ fun DownloadedItem(
 
     ListItem(
         modifier = Modifier
-            .clip(MaterialTheme.shapes.large)
-            .clickable { onUserClick(download) }
             .fillMaxWidth(),
+        onClick = { onUserClick(download) },
+        shapes = ListItemDefaults.shapes(
+            shape = MaterialTheme.shapes.large,
+        ),
         colors = ListItemDefaults.colors(
             containerColor = Color.Transparent,
         ),
@@ -78,7 +80,7 @@ fun DownloadedItem(
                 fallbackData = imageDataPair.second,
             )
         },
-        headlineContent = {
+        content = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
             ) {
@@ -197,7 +199,7 @@ fun DownloadsCard(
                     maxLines = 1,
                 )
             },
-            headlineContent = {
+            content = {
                 Text(
                     text = download.label.nullIfEmpty() ?: state.name,
                     overflow = TextOverflow.Ellipsis,
@@ -235,14 +237,16 @@ fun CombinedUpdateCard(
 
     ListItem(
         modifier = Modifier
-            .clip(MaterialTheme.shapes.large)
             .border(2.dp, MaterialTheme.colorScheme.outlineVariant, MaterialTheme.shapes.large)
-            .clickable { onUserClick(product) }
             .width(IntrinsicSize.Max)
             .widthIn(
                 min = PRODUCT_CARD_HEIGHT,
                 max = PRODUCT_CARD_WIDTH,
             ),
+        onClick = { onUserClick(product) },
+        shapes = ListItemDefaults.shapes(
+            shape = MaterialTheme.shapes.large
+        ),
         colors = ListItemDefaults.colors(
             containerColor = Color.Transparent,
         ),
@@ -283,7 +287,7 @@ fun CombinedUpdateCard(
                 maxLines = 1,
             )
         },
-        headlineContent = {
+        content = {
             Text(
                 text = product.name,
                 overflow = TextOverflow.Ellipsis,

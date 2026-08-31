@@ -260,7 +260,7 @@ fun PrefsOtherPage(
                             },
                         )
                     },
-                    headlineContent = {
+                    content = {
                         Text(
                             text = stringResource(id = R.string.application_name),
                             style = MaterialTheme.typography.headlineSmall,
@@ -293,14 +293,17 @@ fun PrefsOtherPage(
             item {
                 ListItem(
                     modifier = Modifier
-                        .clip(MaterialTheme.shapes.large)
-                        .clickable {
-                            val intent =
-                                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                                    data = "package:${context.packageName}".toUri()
-                                }
-                            context.startActivity(intent)
-                        },
+                        .fillMaxWidth(),
+                    onClick = {
+                        val intent =
+                            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                                data = "package:${context.packageName}".toUri()
+                            }
+                        context.startActivity(intent)
+                    },
+                    shapes = ListItemDefaults.shapes(
+                        shape = MaterialTheme.shapes.large,
+                    ),
                     colors = ListItemDefaults.colors(
                         containerColor = MaterialTheme.colorScheme.errorContainer,
                     ),
@@ -311,7 +314,7 @@ fun PrefsOtherPage(
                             contentDescription = null,
                         )
                     },
-                    headlineContent = {
+                    content = {
                         Text(
                             text = stringResource(id = R.string.warning_not_default_app_handler),
                             color = MaterialTheme.colorScheme.onErrorContainer,

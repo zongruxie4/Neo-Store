@@ -186,7 +186,7 @@ fun RepoPage(
                 overlineContent = {
                     Text(text = stringResource(id = R.string.name))
                 },
-                headlineContent = {
+                content = {
                     Text(
                         text = repo.name.nullIfEmpty()
                             ?: stringResource(id = R.string.new_repository),

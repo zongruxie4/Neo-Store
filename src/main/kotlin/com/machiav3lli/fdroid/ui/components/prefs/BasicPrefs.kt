@@ -1,8 +1,6 @@
 package com.machiav3lli.fdroid.ui.components.prefs
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.LocalIndication
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,7 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -62,34 +59,29 @@ fun BasePreference(
     ListItem(
         modifier = modifier
             .fillMaxWidth()
-            .clip(
-                RoundedCornerShape(
-                    topStart = if (base == 0f) MaterialTheme.shapes.large.topStart
-                    else MaterialTheme.shapes.extraSmall.topStart,
-                    topEnd = if (base == 0f) MaterialTheme.shapes.large.topEnd
-                    else MaterialTheme.shapes.extraSmall.topEnd,
-                    bottomStart = if (rank == 1f) MaterialTheme.shapes.large.bottomStart
-                    else MaterialTheme.shapes.extraSmall.bottomStart,
-                    bottomEnd = if (rank == 1f) MaterialTheme.shapes.large.bottomEnd
-                    else MaterialTheme.shapes.extraSmall.bottomEnd
-                )
-            )
-            .addIf(onClick != null) {
-                clickable(
-                    enabled = isEnabled,
-                    interactionSource = interactionSource,
-                    indication = LocalIndication.current,
-                    onClick = onClick ?: {}
-                )
-            }
             .addIf(!isEnabled) {
                 alpha(0.3f)
             },
+        onClick = onClick ?: {},
+        enabled = isEnabled,
+        interactionSource = interactionSource,
+        shapes = ListItemDefaults.shapes(
+            shape = RoundedCornerShape(
+                topStart = if (base == 0f) MaterialTheme.shapes.large.topStart
+                else MaterialTheme.shapes.extraSmall.topStart,
+                topEnd = if (base == 0f) MaterialTheme.shapes.large.topEnd
+                else MaterialTheme.shapes.extraSmall.topEnd,
+                bottomStart = if (rank == 1f) MaterialTheme.shapes.large.bottomStart
+                else MaterialTheme.shapes.extraSmall.bottomStart,
+                bottomEnd = if (rank == 1f) MaterialTheme.shapes.large.bottomEnd
+                else MaterialTheme.shapes.extraSmall.bottomEnd
+            )
+        ),
         colors = ListItemDefaults.colors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer,
         ),
         leadingContent = startWidget,
-        headlineContent = {
+        content = {
             Text(
                 text = stringResource(id = titleId),
                 color = MaterialTheme.colorScheme.onSurface,

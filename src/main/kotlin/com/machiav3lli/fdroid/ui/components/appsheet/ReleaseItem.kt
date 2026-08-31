@@ -26,7 +26,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -86,12 +85,14 @@ fun ReleaseItem(
     ListItem(
         modifier = modifier
             .fillMaxWidth()
-            .border(1.dp, border, MaterialTheme.shapes.large)
-            .clip(MaterialTheme.shapes.large),
+            .border(1.dp, border, MaterialTheme.shapes.large),
+        shapes = ListItemDefaults.shapes(
+            shape = MaterialTheme.shapes.large,
+        ),
         colors = ListItemDefaults.colors(
             containerColor = container,
         ),
-        headlineContent = {
+        content = {
             ReleaseTitleWithBadge(
                 version = currentRelease.version
             ) {

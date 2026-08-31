@@ -2,7 +2,6 @@ package com.machiav3lli.fdroid.ui.components.appsheet
 
 import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -12,7 +11,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -28,12 +26,12 @@ fun LinkItem(
 ) {
     ListItem(
         modifier = modifier
-            .fillMaxWidth()
-            .clip(MaterialTheme.shapes.large)
-            .combinedClickable(
-                onClick = { onClick(linkType.link) },
-                onLongClick = { onLongClick(linkType.link) }
-            ),
+            .fillMaxWidth(),
+        onClick = { onClick(linkType.link) },
+        onLongClick = { onLongClick(linkType.link) },
+        shapes = ListItemDefaults.shapes(
+            shape = MaterialTheme.shapes.large,
+        ),
         colors = ListItemDefaults.colors(
             containerColor = Color.Transparent,
         ),
@@ -44,7 +42,7 @@ fun LinkItem(
                 contentDescription = linkType.title
             )
         },
-        headlineContent = {
+        content = {
             Text(
                 text = linkType.title,
                 style = MaterialTheme.typography.titleSmall,

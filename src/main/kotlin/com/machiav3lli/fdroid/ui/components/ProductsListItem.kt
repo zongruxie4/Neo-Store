@@ -1,6 +1,5 @@
 package com.machiav3lli.fdroid.ui.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -112,7 +110,7 @@ fun ProductItemContent(
                 fallbackData = imageDataPair.second,
             )
         },
-        headlineContent = {
+        content = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -189,9 +187,11 @@ fun ProductCarouselItem(
 
     ListItem(
         modifier = Modifier
-            .clip(MaterialTheme.shapes.large)
-            .clickable { onUserClick(product) }
             .fillMaxSize(),
+        onClick = { onUserClick(product) },
+        shapes = ListItemDefaults.shapes(
+            shape = MaterialTheme.shapes.large,
+        ),
         colors = ListItemDefaults.colors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer,
         ),
@@ -207,7 +207,7 @@ fun ProductCarouselItem(
                 )
             }
         },
-        headlineContent = {
+        content = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,

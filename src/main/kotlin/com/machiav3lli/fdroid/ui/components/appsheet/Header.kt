@@ -129,7 +129,7 @@ fun TopBarHeader(
                     fallbackData = iconPair?.second,
                 )
             },
-            headlineContent = {
+            content = {
                 Text(text = appName, style = MaterialTheme.typography.titleMedium)
             },
             supportingContent = {
@@ -277,7 +277,9 @@ fun CircularDownloadProgress(
 @Composable
 fun WarningCard(message: String) {
     ListItem(
-        modifier = Modifier.clip(MaterialTheme.shapes.large),
+        shapes = ListItemDefaults.shapes(
+            shape = MaterialTheme.shapes.large,
+        ),
         colors = ListItemDefaults.colors(
             containerColor = MaterialTheme.colorScheme.errorContainer,
         ),
@@ -288,7 +290,7 @@ fun WarningCard(message: String) {
                 contentDescription = message,
             )
         },
-        headlineContent = {
+        content = {
             Text(
                 text = message,
                 color = MaterialTheme.colorScheme.onErrorContainer,
