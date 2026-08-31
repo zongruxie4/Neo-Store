@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -63,7 +62,7 @@ import com.machiav3lli.fdroid.ui.components.ProductsListItem
 import com.machiav3lli.fdroid.ui.components.RoundButton
 import com.machiav3lli.fdroid.ui.components.SegmentedTabButton
 import com.machiav3lli.fdroid.ui.components.SelectChip
-import com.machiav3lli.fdroid.ui.components.SortFilterChip
+import com.machiav3lli.fdroid.ui.components.SortFilterButton
 import com.machiav3lli.fdroid.ui.compose.icons.Phosphor
 import com.machiav3lli.fdroid.ui.compose.icons.phosphor.Asterisk
 import com.machiav3lli.fdroid.ui.compose.icons.phosphor.CirclesFour
@@ -104,17 +103,17 @@ fun ExplorePage(
     val openDialog = remember { mutableStateOf(false) }
     val dialogKey: MutableState<DialogKey?> = remember { mutableStateOf(null) }
 
-    val notModifiedSortFilter by remember(categoryProductsState.sortFilter) {
+    val modifiedSortFilter by remember(categoryProductsState.sortFilter) {
         derivedStateOf {
-            Preferences[Preferences.Key.SortOrderExplore] == Preferences.Key.SortOrderExplore.default.value &&
-                    Preferences[Preferences.Key.SortOrderAscendingExplore] == Preferences.Key.SortOrderAscendingExplore.default.value &&
-                    Preferences[Preferences.Key.ReposFilterExplore] == Preferences.Key.ReposFilterExplore.default.value &&
-                    Preferences[Preferences.Key.LicensesFilterExplore] == Preferences.Key.LicensesFilterExplore.default.value &&
-                    Preferences[Preferences.Key.AntifeaturesFilterExplore] == Preferences.Key.AntifeaturesFilterExplore.default.value &&
-                    Preferences[Preferences.Key.MinTargetSDKExplore] == Preferences.Key.MinTargetSDKExplore.default.value &&
-                    Preferences[Preferences.Key.MaxTargetSDKExplore] == Preferences.Key.MaxTargetSDKExplore.default.value &&
-                    Preferences[Preferences.Key.MinMinSDKExplore] == Preferences.Key.MinMinSDKExplore.default.value &&
-                    Preferences[Preferences.Key.MaxMinSDKExplore] == Preferences.Key.MaxMinSDKExplore.default.value
+            Preferences[Preferences.Key.SortOrderExplore] != Preferences.Key.SortOrderExplore.default.value ||
+                    Preferences[Preferences.Key.SortOrderAscendingExplore] != Preferences.Key.SortOrderAscendingExplore.default.value ||
+                    Preferences[Preferences.Key.ReposFilterExplore] != Preferences.Key.ReposFilterExplore.default.value ||
+                    Preferences[Preferences.Key.LicensesFilterExplore] != Preferences.Key.LicensesFilterExplore.default.value ||
+                    Preferences[Preferences.Key.AntifeaturesFilterExplore] != Preferences.Key.AntifeaturesFilterExplore.default.value ||
+                    Preferences[Preferences.Key.MinTargetSDKExplore] != Preferences.Key.MinTargetSDKExplore.default.value ||
+                    Preferences[Preferences.Key.MaxTargetSDKExplore] != Preferences.Key.MaxTargetSDKExplore.default.value ||
+                    Preferences[Preferences.Key.MinMinSDKExplore] != Preferences.Key.MinMinSDKExplore.default.value ||
+                    Preferences[Preferences.Key.MaxMinSDKExplore] != Preferences.Key.MaxMinSDKExplore.default.value
         }
     }
 
@@ -164,65 +163,75 @@ fun ExplorePage(
         ),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        SingleChoiceSegmentedButtonRow(
+        Row(
             modifier = Modifier
-                .padding(top = 4.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.surfaceContainerHighest,
-                    shape = MaterialTheme.shapes.extraLarge,
-                )
-                .padding(horizontal = 4.dp),
+                .padding(horizontal = 8.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
         ) {
-            SegmentedTabButton(
-                text = stringResource(id = R.string.categories),
-                icon = Phosphor.CirclesFour,
-                selected = {
-                    exploreTab.intValue == 0
-                },
-                onClick = {
-                    exploreTab.intValue = 0
-                }
-            )
-            if (Preferences[Preferences.Key.DLStatsProvider] != Preferences.DLStatsProvider.None
-                && topProductsState.statsNotEmpty
-            ) SegmentedTabButton(
-                text = stringResource(id = R.string.top_apps),
-                icon = Phosphor.Asterisk,
-                selected = {
-                    exploreTab.intValue == 1
-                },
-                onClick = {
-                    exploreTab.intValue = 1
-                },
-            )
-        }
-        when (exploreTab.intValue) {
-            0 -> {
-                Row(
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
+            Row(
+                modifier = Modifier.weight(1f),
+                horizontalArrangement = Arrangement.Start,
+            ) {
+                AnimatedVisibility(
+                    exploreTab.intValue == 0 && selectedCategory.value.isNotEmpty()
                 ) {
-                    AnimatedVisibility(selectedCategory.value.isNotEmpty()) {
-                        RoundButton(
-                            icon = Phosphor.ListBullets,
-                            description = stringResource(id = R.string.categories)
-                        ) {
-                            Preferences[Preferences.Key.CategoriesFilterExplore] = ""
-                            selectedCategory.value = ""
-                            viewModel.setExploreSource(Source.NONE)
-                        }
-                    }
-                    Spacer(modifier = Modifier.weight(1f))
-                    SortFilterChip(
-                        notModified = notModifiedSortFilter,
-                        fullWidth = true,
+                    RoundButton(
+                        icon = Phosphor.ListBullets,
+                        description = stringResource(id = R.string.categories)
                     ) {
+                        Preferences[Preferences.Key.CategoriesFilterExplore] = ""
+                        selectedCategory.value = ""
+                        viewModel.setExploreSource(Source.NONE)
+                    }
+                }
+            }
+            SingleChoiceSegmentedButtonRow(
+                modifier = Modifier
+                    .padding(top = 4.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                        shape = MaterialTheme.shapes.extraLarge,
+                    )
+                    .padding(horizontal = 4.dp),
+            ) {
+                SegmentedTabButton(
+                    text = stringResource(id = R.string.categories),
+                    icon = Phosphor.CirclesFour,
+                    selected = {
+                        exploreTab.intValue == 0
+                    },
+                    onClick = {
+                        exploreTab.intValue = 0
+                    }
+                )
+                if (Preferences[Preferences.Key.DLStatsProvider] != Preferences.DLStatsProvider.None
+                    && topProductsState.statsNotEmpty
+                ) SegmentedTabButton(
+                    text = stringResource(id = R.string.top_apps),
+                    icon = Phosphor.Asterisk,
+                    selected = {
+                        exploreTab.intValue == 1
+                    },
+                    onClick = {
+                        exploreTab.intValue = 1
+                    },
+                )
+            }
+            Row(
+                modifier = Modifier.weight(1f),
+                horizontalArrangement = Arrangement.End,
+            ) {
+                if (exploreTab.intValue == 0) {
+                    SortFilterButton(isModified = modifiedSortFilter) {
                         neoActivity.navigateSortFilterSheet(NavItem.Explore)
                     }
                 }
+            }
+        }
+        when (exploreTab.intValue) {
+            0 -> {
                 Column(
                     modifier = Modifier.clipToBounds(),
                 ) {
@@ -315,8 +324,8 @@ fun ExplorePage(
                     stickyHeader(key = "topAppsModes") {
                         LazyRow(
                             modifier = Modifier
-                                    .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-                                    .height(54.dp),
+                                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
+                                .height(54.dp),
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             contentPadding = PaddingValues(8.dp)
                         ) {

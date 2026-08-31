@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -44,8 +42,9 @@ import com.machiav3lli.fdroid.data.entity.DialogKey
 import com.machiav3lli.fdroid.data.entity.Source
 import com.machiav3lli.fdroid.ui.components.DelayedLinearProgressBar
 import com.machiav3lli.fdroid.ui.components.ProductsListItem
+import com.machiav3lli.fdroid.ui.components.RoundButton
 import com.machiav3lli.fdroid.ui.components.SelectChip
-import com.machiav3lli.fdroid.ui.components.SortFilterChip
+import com.machiav3lli.fdroid.ui.components.SortFilterButton
 import com.machiav3lli.fdroid.ui.components.TopBar
 import com.machiav3lli.fdroid.ui.components.WideSearchField
 import com.machiav3lli.fdroid.ui.compose.icons.Phosphor
@@ -53,6 +52,7 @@ import com.machiav3lli.fdroid.ui.compose.icons.phosphor.ArrowSquareOut
 import com.machiav3lli.fdroid.ui.compose.icons.phosphor.CircleWavyWarning
 import com.machiav3lli.fdroid.ui.compose.icons.phosphor.CirclesFour
 import com.machiav3lli.fdroid.ui.compose.icons.phosphor.HeartStraight
+import com.machiav3lli.fdroid.ui.compose.icons.phosphor.X
 import com.machiav3lli.fdroid.ui.dialog.BaseDialog
 import com.machiav3lli.fdroid.ui.dialog.KeyDialogUI
 import com.machiav3lli.fdroid.ui.navigation.NavItem
@@ -90,18 +90,18 @@ fun SearchPage(
         }
     }
 
-    val notModifiedSortFilter by remember(pageState.sortFilter) {
+    val modifiedSortFilter by remember(pageState.sortFilter) {
         derivedStateOf {
-            Preferences[Preferences.Key.SortOrderSearch] == Preferences.Key.SortOrderSearch.default.value &&
-                    Preferences[Preferences.Key.SortOrderAscendingSearch] == Preferences.Key.SortOrderAscendingSearch.default.value &&
-                    Preferences[Preferences.Key.ReposFilterSearch] == Preferences.Key.ReposFilterSearch.default.value &&
-                    Preferences[Preferences.Key.CategoriesFilterSearch] == Preferences.Key.CategoriesFilterSearch.default.value &&
-                    Preferences[Preferences.Key.LicensesFilterSearch] == Preferences.Key.LicensesFilterSearch.default.value &&
-                    Preferences[Preferences.Key.AntifeaturesFilterSearch] == Preferences.Key.AntifeaturesFilterSearch.default.value &&
-                    Preferences[Preferences.Key.MinTargetSDKSearch] == Preferences.Key.MinTargetSDKSearch.default.value &&
-                    Preferences[Preferences.Key.MaxTargetSDKSearch] == Preferences.Key.MaxTargetSDKSearch.default.value &&
-                    Preferences[Preferences.Key.MinMinSDKSearch] == Preferences.Key.MinMinSDKSearch.default.value &&
-                    Preferences[Preferences.Key.MaxMinSDKSearch] == Preferences.Key.MaxMinSDKSearch.default.value
+            Preferences[Preferences.Key.SortOrderSearch] != Preferences.Key.SortOrderSearch.default.value ||
+                    Preferences[Preferences.Key.SortOrderAscendingSearch] != Preferences.Key.SortOrderAscendingSearch.default.value ||
+                    Preferences[Preferences.Key.ReposFilterSearch] != Preferences.Key.ReposFilterSearch.default.value ||
+                    Preferences[Preferences.Key.CategoriesFilterSearch] != Preferences.Key.CategoriesFilterSearch.default.value ||
+                    Preferences[Preferences.Key.LicensesFilterSearch] != Preferences.Key.LicensesFilterSearch.default.value ||
+                    Preferences[Preferences.Key.AntifeaturesFilterSearch] != Preferences.Key.AntifeaturesFilterSearch.default.value ||
+                    Preferences[Preferences.Key.MinTargetSDKSearch] != Preferences.Key.MinTargetSDKSearch.default.value ||
+                    Preferences[Preferences.Key.MaxTargetSDKSearch] != Preferences.Key.MaxTargetSDKSearch.default.value ||
+                    Preferences[Preferences.Key.MinMinSDKSearch] != Preferences.Key.MinMinSDKSearch.default.value ||
+                    Preferences[Preferences.Key.MaxMinSDKSearch] != Preferences.Key.MaxMinSDKSearch.default.value
         }
     }
 
@@ -153,8 +153,7 @@ fun SearchPage(
             ) {
                 WideSearchField(
                     query = pageState.query,
-                    modifier = Modifier.fillMaxWidth(),
-                    showCloseButton = true,
+                    modifier = Modifier.weight(1f),
                     onQueryChanged = { newQuery ->
                         if (newQuery != pageState.query)
                             viewModel.setSearchQuery(newQuery)
@@ -162,8 +161,16 @@ fun SearchPage(
                     onCleanQuery = {
                         viewModel.setSearchQuery("")
                     },
-                    onClose = onDismiss
                 )
+                SortFilterButton(isModified = modifiedSortFilter) {
+                    neoActivity.navigateSortFilterSheet(NavItem.Search)
+                }
+                RoundButton(
+                    icon = Phosphor.X,
+                    description = stringResource(id = R.string.cancel),
+                ) {
+                    onDismiss()
+                }
             }
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
@@ -208,18 +215,6 @@ fun SearchPage(
                     ) {
                         viewModel.setSearchSource(Source.SEARCH_FAVORITES)
                     }
-                }
-            }
-            Row(
-                modifier = Modifier.padding(horizontal = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.Bottom,
-            ) {
-                SortFilterChip(
-                    notModified = notModifiedSortFilter,
-                    fullWidth = true,
-                ) {
-                    neoActivity.navigateSortFilterSheet(NavItem.Search)
                 }
             }
             DelayedLinearProgressBar(

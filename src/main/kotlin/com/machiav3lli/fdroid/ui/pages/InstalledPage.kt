@@ -46,7 +46,7 @@ import com.machiav3lli.fdroid.ui.components.ActionChip
 import com.machiav3lli.fdroid.ui.components.DownloadedItem
 import com.machiav3lli.fdroid.ui.components.ProductsListItem
 import com.machiav3lli.fdroid.ui.components.SegmentedTabButton
-import com.machiav3lli.fdroid.ui.components.SortFilterChip
+import com.machiav3lli.fdroid.ui.components.SortFilterButton
 import com.machiav3lli.fdroid.ui.compose.icons.Phosphor
 import com.machiav3lli.fdroid.ui.compose.icons.phosphor.ArrowSquareOut
 import com.machiav3lli.fdroid.ui.compose.icons.phosphor.Download
@@ -77,18 +77,18 @@ fun InstalledPage(
 
     val openDialog = remember { mutableStateOf(false) }
     val dialogKey: MutableState<DialogKey?> = remember { mutableStateOf(null) }
-    val notModifiedSortFilter by remember(installedPageState.sortFilter) {
+    val modifiedSortFilter by remember(installedPageState.sortFilter) {
         derivedStateOf {
-            Preferences[Preferences.Key.SortOrderInstalled] == Preferences.Key.SortOrderInstalled.default.value &&
-                    Preferences[Preferences.Key.SortOrderAscendingInstalled] == Preferences.Key.SortOrderAscendingInstalled.default.value &&
-                    Preferences[Preferences.Key.ReposFilterInstalled] == Preferences.Key.ReposFilterInstalled.default.value &&
-                    Preferences[Preferences.Key.CategoriesFilterInstalled] == Preferences.Key.CategoriesFilterInstalled.default.value &&
-                    Preferences[Preferences.Key.LicensesFilterInstalled] == Preferences.Key.LicensesFilterInstalled.default.value &&
-                    Preferences[Preferences.Key.AntifeaturesFilterInstalled] == Preferences.Key.AntifeaturesFilterInstalled.default.value &&
-                    Preferences[Preferences.Key.MinTargetSDKInstalled] == Preferences.Key.MinTargetSDKInstalled.default.value &&
-                    Preferences[Preferences.Key.MaxTargetSDKInstalled] == Preferences.Key.MinTargetSDKInstalled.default.value &&
-                    Preferences[Preferences.Key.MinMinSDKInstalled] == Preferences.Key.MinMinSDKInstalled.default.value &&
-                    Preferences[Preferences.Key.MaxMinSDKInstalled] == Preferences.Key.MinMinSDKInstalled.default.value
+            Preferences[Preferences.Key.SortOrderInstalled] != Preferences.Key.SortOrderInstalled.default.value ||
+                    Preferences[Preferences.Key.SortOrderAscendingInstalled] != Preferences.Key.SortOrderAscendingInstalled.default.value ||
+                    Preferences[Preferences.Key.ReposFilterInstalled] != Preferences.Key.ReposFilterInstalled.default.value ||
+                    Preferences[Preferences.Key.CategoriesFilterInstalled] != Preferences.Key.CategoriesFilterInstalled.default.value ||
+                    Preferences[Preferences.Key.LicensesFilterInstalled] != Preferences.Key.LicensesFilterInstalled.default.value ||
+                    Preferences[Preferences.Key.AntifeaturesFilterInstalled] != Preferences.Key.AntifeaturesFilterInstalled.default.value ||
+                    Preferences[Preferences.Key.MinTargetSDKInstalled] != Preferences.Key.MinTargetSDKInstalled.default.value ||
+                    Preferences[Preferences.Key.MaxTargetSDKInstalled] != Preferences.Key.MinTargetSDKInstalled.default.value ||
+                    Preferences[Preferences.Key.MinMinSDKInstalled] != Preferences.Key.MinMinSDKInstalled.default.value ||
+                    Preferences[Preferences.Key.MaxMinSDKInstalled] != Preferences.Key.MinMinSDKInstalled.default.value
         }
     }
 
@@ -173,7 +173,7 @@ fun InstalledPage(
                 neoActivity,
                 installedPageState,
                 dataState,
-                notModifiedSortFilter,
+                modifiedSortFilter,
                 mainVM::setFavorite,
                 openDialog = { name, action ->
                     dialogKey.value = DialogKey.Download(name, action)
@@ -224,7 +224,7 @@ fun LazyListScope.InstalledLazyItems(
     neoActivity: NeoActivity,
     pageState: InstalledPageState,
     dataState: DataState,
-    notModifiedSortFilter: Boolean,
+    modifiedSortFilter: Boolean,
     setFavorite: (String, Boolean) -> Unit,
     openDialog: (String, () -> Unit) -> Unit,
 ) {
@@ -243,7 +243,7 @@ fun LazyListScope.InstalledLazyItems(
                 modifier = Modifier.padding(start = 8.dp),
                 maxLines = 2,
             )
-            SortFilterChip(notModified = notModifiedSortFilter) {
+            SortFilterButton(isModified = modifiedSortFilter) {
                 neoActivity.navigateSortFilterSheet(NavItem.Installed)
             }
         }

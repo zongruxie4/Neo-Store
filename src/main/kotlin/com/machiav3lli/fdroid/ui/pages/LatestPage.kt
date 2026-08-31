@@ -34,7 +34,7 @@ import com.machiav3lli.fdroid.data.content.Preferences
 import com.machiav3lli.fdroid.data.entity.ActionState
 import com.machiav3lli.fdroid.data.entity.DialogKey
 import com.machiav3lli.fdroid.ui.components.ProductsListItem
-import com.machiav3lli.fdroid.ui.components.SortFilterChip
+import com.machiav3lli.fdroid.ui.components.SortFilterButton
 import com.machiav3lli.fdroid.ui.compose.ProductsCarousel
 import com.machiav3lli.fdroid.ui.compose.ProductsHorizontalRecycler
 import com.machiav3lli.fdroid.ui.dialog.BaseDialog
@@ -61,17 +61,17 @@ fun LatestPage(
 
     val openDialog = remember { mutableStateOf(false) }
     val dialogKey: MutableState<DialogKey?> = remember { mutableStateOf(null) }
-    val notModifiedSortFilter by remember(pageState.sortFilter) {
+    val modifiedSortFilter by remember(pageState.sortFilter) {
         derivedStateOf {
-            Preferences[Preferences.Key.SortOrderAscendingLatest] == Preferences.Key.SortOrderAscendingLatest.default.value &&
-                    Preferences[Preferences.Key.ReposFilterLatest] == Preferences.Key.ReposFilterLatest.default.value &&
-                    Preferences[Preferences.Key.CategoriesFilterLatest] == Preferences.Key.CategoriesFilterLatest.default.value &&
-                    Preferences[Preferences.Key.LicensesFilterLatest] == Preferences.Key.LicensesFilterLatest.default.value &&
-                    Preferences[Preferences.Key.AntifeaturesFilterLatest] == Preferences.Key.AntifeaturesFilterLatest.default.value &&
-                    Preferences[Preferences.Key.MinTargetSDKLatest] == Preferences.Key.MinTargetSDKLatest.default.value &&
-                    Preferences[Preferences.Key.MaxTargetSDKLatest] == Preferences.Key.MaxTargetSDKLatest.default.value &&
-                    Preferences[Preferences.Key.MinMinSDKLatest] == Preferences.Key.MinMinSDKLatest.default.value &&
-                    Preferences[Preferences.Key.MaxMinSDKLatest] == Preferences.Key.MaxMinSDKLatest.default.value
+            Preferences[Preferences.Key.SortOrderAscendingLatest] != Preferences.Key.SortOrderAscendingLatest.default.value ||
+                    Preferences[Preferences.Key.ReposFilterLatest] != Preferences.Key.ReposFilterLatest.default.value ||
+                    Preferences[Preferences.Key.CategoriesFilterLatest] != Preferences.Key.CategoriesFilterLatest.default.value ||
+                    Preferences[Preferences.Key.LicensesFilterLatest] != Preferences.Key.LicensesFilterLatest.default.value ||
+                    Preferences[Preferences.Key.AntifeaturesFilterLatest] != Preferences.Key.AntifeaturesFilterLatest.default.value ||
+                    Preferences[Preferences.Key.MinTargetSDKLatest] != Preferences.Key.MinTargetSDKLatest.default.value ||
+                    Preferences[Preferences.Key.MaxTargetSDKLatest] != Preferences.Key.MaxTargetSDKLatest.default.value ||
+                    Preferences[Preferences.Key.MinMinSDKLatest] != Preferences.Key.MinMinSDKLatest.default.value ||
+                    Preferences[Preferences.Key.MaxMinSDKLatest] != Preferences.Key.MaxMinSDKLatest.default.value
         }
     }
 
@@ -199,7 +199,7 @@ fun LatestPage(
                         .padding(start = 8.dp),
                     maxLines = 2,
                 )
-                SortFilterChip(notModified = notModifiedSortFilter) {
+                SortFilterButton(isModified = modifiedSortFilter) {
                     neoActivity.navigateSortFilterSheet(NavItem.Latest)
                 }
             }
