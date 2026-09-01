@@ -7,7 +7,7 @@ import com.machiav3lli.fdroid.data.database.entity.IndexProduct
 import com.machiav3lli.fdroid.data.database.entity.Release
 import com.machiav3lli.fdroid.data.entity.Author
 import com.machiav3lli.fdroid.data.entity.Donate
-import com.machiav3lli.fdroid.data.index.v0.IndexV0Parser
+import com.machiav3lli.fdroid.data.index.IndexContentMerger
 import com.machiav3lli.fdroid.data.index.v2.IndexV2.File
 import com.machiav3lli.fdroid.utils.extension.android.Android
 import java.util.Locale
@@ -35,7 +35,7 @@ internal fun IndexV2.Package.toProduct(repositoryId: Long, packageName: String) 
         metadata.liberapay?.let { Donate.Liberapay(it) },
         metadata.litecoin?.let { Donate.Litecoin(it) },
     )
-        .sortedWith(IndexV0Parser.DonateComparator),
+        .sortedWith(IndexContentMerger.DonateComparator),
     screenshots = with(metadata.screenshots) {
         listOfNotNull(this?.phone, this?.sevenInch, this?.tenInch, this?.wear, this?.tv)
             .fold(mutableMapOf<String, List<File>>()) { acc, map ->

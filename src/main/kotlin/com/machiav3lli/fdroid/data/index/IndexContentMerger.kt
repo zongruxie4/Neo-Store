@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import com.machiav3lli.fdroid.data.database.Converters
 import com.machiav3lli.fdroid.data.database.entity.IndexProduct
 import com.machiav3lli.fdroid.data.database.entity.Release
+import com.machiav3lli.fdroid.data.entity.Donate
 import com.machiav3lli.fdroid.utils.extension.android.asSequence
 import com.machiav3lli.fdroid.utils.extension.android.execWithResult
 import java.io.ByteArrayOutputStream
@@ -75,6 +76,26 @@ class IndexContentMerger(file: File) : Closeable {
         if (db.inTransaction()) {
             db.setTransactionSuccessful()
             db.endTransaction()
+        }
+    }
+
+    internal object DonateComparator : Comparator<Donate> {
+        private val classes = listOf(
+            Donate.Regular::class,
+            Donate.Bitcoin::class,
+            Donate.Litecoin::class,
+            Donate.Liberapay::class,
+            Donate.OpenCollective::class
+        )
+
+        override fun compare(donate1: Donate, donate2: Donate): Int {
+            val index1 = classes.indexOf(donate1::class)
+            val index2 = classes.indexOf(donate2::class)
+            return when {
+                index1 >= 0 && index2 == -1 -> -1
+                index2 >= 0 && index1 == -1 -> 1
+                else                        -> index1.compareTo(index2)
+            }
         }
     }
 }

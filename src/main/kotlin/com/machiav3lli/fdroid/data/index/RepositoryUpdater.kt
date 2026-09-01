@@ -15,7 +15,6 @@ import com.machiav3lli.fdroid.data.database.entity.RepoCategoryTemp
 import com.machiav3lli.fdroid.data.database.entity.Repository
 import com.machiav3lli.fdroid.data.database.entity.asProductTemp
 import com.machiav3lli.fdroid.data.database.entity.asReleaseTemp
-import com.machiav3lli.fdroid.data.index.v0.IndexV0Parser
 import com.machiav3lli.fdroid.data.index.v1.IndexV1Parser
 import com.machiav3lli.fdroid.data.index.v2.IdMap
 import com.machiav3lli.fdroid.data.index.v2.IndexV2
@@ -61,7 +60,6 @@ object RepositoryUpdater : KoinComponent {
         val contentName: String,
         val certificateFromIndex: Boolean,
     ) {
-        INDEX("index.jar", "index.xml", true),
         INDEX_V1("index-v1.jar", "index-v1.json", false),
         INDEX_V2("", "index-v2.json", false),
         INDEX_V2_ENTRY("entry.jar", "entry.json", false),
@@ -125,7 +123,6 @@ object RepositoryUpdater : KoinComponent {
                 if (Preferences[Preferences.Key.IndexV2]) IndexType.INDEX_V2_ENTRY else null,
                 if (Preferences[Preferences.Key.IndexV2]) IndexType.INDEX_V2 else null,
                 IndexType.INDEX_V1,
-                IndexType.INDEX
             ),
             unstable = unstable,
             callback = callback
@@ -282,7 +279,6 @@ object RepositoryUpdater : KoinComponent {
                 indexTypes = persistentListOf(
                     IndexType.INDEX_V2,
                     IndexType.INDEX_V1,
-                    IndexType.INDEX,
                 ),
                 unstable = unstable,
                 entryLastModified = entryLastModified,
@@ -439,17 +435,6 @@ object RepositoryUpdater : KoinComponent {
                     "parsing index file, repoID = ${repository.id}, indexType = $indexType, total = $total, lastModified = $lastModified, entryLastModified = $entryLastModified"
                 )
                 val (changedRepository, certificateFromIndex) = when (indexType) {
-                    IndexType.INDEX    -> processIndexV0(
-                        context,
-                        repository,
-                        jarFile?.getInputStream(indexEntry)!!,
-                        unstable,
-                        lastModified,
-                        entityTag,
-                        total!!,
-                        callback,
-                    )
-
                     IndexType.INDEX_V1 -> processIndexV1(
                         context,
                         repository,
@@ -566,72 +551,6 @@ object RepositoryUpdater : KoinComponent {
                 }
             }
         }
-    }
-
-    private fun processIndexV0(
-        context: Context,
-        repository: Repository,
-        inputStream: InputStream,
-        unstable: Boolean,
-        lastModified: String,
-        entityTag: String,
-        total: Long,
-        callback: (Stage, Long, Long?) -> Unit
-    ): Pair<Repository?, String?> {
-        var changedRepository: Repository? = null
-        var certificateFromIndex: String? = null
-        val products = mutableListOf<IndexProduct>()
-        val features = context.packageManager.systemAvailableFeatures
-            .asSequence().map { it.name }.toSet() + setOf("android.hardware.touchscreen")
-
-        val parser = IndexV0Parser(repository.id, object : IndexV0Parser.Callback {
-            override fun onRepository(
-                mirrors: List<String>, name: String, description: String,
-                certificate: String, version: Int, timestamp: Long,
-            ) {
-                changedRepository = repository.update(
-                    mirrors = mirrors,
-                    name = name,
-                    description = description,
-                    version = version,
-                    lastModified = lastModified,
-                    entityTag = entityTag,
-                    timestamp = timestamp,
-                    webBaseUrl = null,
-                    entryLastModified = null,
-                    entryEntityTag = null,
-                )
-                certificateFromIndex = certificate.lowercase(Locale.US)
-            }
-
-            override fun onProduct(product: IndexProduct) {
-                if (Thread.interrupted()) throw InterruptedException()
-
-                products += product.apply {
-                    refreshReleases(features, unstable)
-                }
-                if (products.size >= 100) {
-                    runBlocking(Dispatchers.IO) {
-                        insertProductBatch(products)
-                        products.clear()
-                    }
-                }
-            }
-        })
-
-        runBlocking(Dispatchers.IO) {
-            ProgressInputStream(inputStream) {
-                callback(Stage.PROCESS, it, total)
-            }.use { parser.parse(it) }
-
-            if (Thread.interrupted()) throw InterruptedException()
-
-            if (products.isNotEmpty()) {
-                insertProductBatch(products)
-                products.clear()
-            }
-        }
-        return Pair(changedRepository, certificateFromIndex)
     }
 
     private fun processIndexV1(

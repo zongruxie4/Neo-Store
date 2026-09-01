@@ -7,7 +7,7 @@ import com.machiav3lli.fdroid.data.database.entity.IndexProduct
 import com.machiav3lli.fdroid.data.database.entity.Release
 import com.machiav3lli.fdroid.data.entity.Author
 import com.machiav3lli.fdroid.data.entity.Donate
-import com.machiav3lli.fdroid.data.index.v0.IndexV0Parser
+import com.machiav3lli.fdroid.data.index.IndexContentMerger
 import com.machiav3lli.fdroid.utils.extension.Quintuple
 import com.machiav3lli.fdroid.utils.extension.android.Android
 import com.machiav3lli.fdroid.utils.extension.text.nullIfEmpty
@@ -40,7 +40,7 @@ internal fun IndexV1.App.toProduct(repositoryId: Long) = IndexProduct(
         liberapay?.let { Donate.Liberapay(it) },
         litecoin?.let { Donate.Litecoin(it) },
     )
-        .sortedWith(IndexV0Parser.DonateComparator),
+        .sortedWith(IndexContentMerger.DonateComparator),
     screenshots = localized
         .find { key, localized ->
             Quintuple(
