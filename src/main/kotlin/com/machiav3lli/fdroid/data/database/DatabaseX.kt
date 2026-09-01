@@ -127,7 +127,7 @@ import java.io.File
         DownloadStats::class,
         DownloadStatsFileMetadata::class,
     ],
-    version = 1211,
+    version = 1300,
     exportSchema = true,
     views = [
         PackageSum::class,
@@ -323,6 +323,11 @@ import java.io.File
         AutoMigration(
             from = 1210,
             to = 1211,
+        ),
+        AutoMigration(
+            from = 1211,
+            to = 1300,
+            spec = DatabaseX.Companion.ProductsCleanup::class
         ),
     ]
 )

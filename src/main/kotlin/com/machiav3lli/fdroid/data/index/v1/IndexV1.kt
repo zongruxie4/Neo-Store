@@ -107,6 +107,7 @@ data class IndexV1(
         val usesPermissionSdk23: List<Permission> = emptyList(),
         val features: List<String> = emptyList(),
         val nativecode: List<String> = emptyList(),
+        val antiFeatures: List<String> = emptyList(),
     )
 
     @Serializable

@@ -1,6 +1,7 @@
 package com.machiav3lli.fdroid.data.database.entity
 
 import androidx.room.ColumnInfo
+import com.machiav3lli.fdroid.data.entity.AntiFeature
 import com.machiav3lli.fdroid.data.entity.Author
 import com.machiav3lli.fdroid.data.entity.Donate
 import com.machiav3lli.fdroid.utils.extension.android.Android
@@ -152,6 +153,9 @@ open class IndexProduct(
                 releasePairs.indexOfFirst { predicate(it.first) }
         val firstSelected = if (firstReleaseIndex >= 0) releasePairs[firstReleaseIndex] else null
 
+        if (releases.any { it.hasVulnerability }
+            && !antiFeatures.contains(AntiFeature.KNOWN_VULN.key))
+            antiFeatures += AntiFeature.KNOWN_VULN.key
         releases = releasePairs.map { (release, incompatibilities) ->
             release.copy(
                 incompatibilities = incompatibilities,

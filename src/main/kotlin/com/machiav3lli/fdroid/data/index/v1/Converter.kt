@@ -5,6 +5,7 @@ import androidx.core.os.ConfigurationCompat.getLocales
 import androidx.core.os.LocaleListCompat
 import com.machiav3lli.fdroid.data.database.entity.IndexProduct
 import com.machiav3lli.fdroid.data.database.entity.Release
+import com.machiav3lli.fdroid.data.entity.AntiFeature
 import com.machiav3lli.fdroid.data.entity.Author
 import com.machiav3lli.fdroid.data.entity.Donate
 import com.machiav3lli.fdroid.data.index.IndexContentMerger
@@ -112,6 +113,7 @@ internal fun IndexV1.Package.toRelease(
     platforms = nativecode,
     incompatibilities = emptyList(),
     isCompatible = true,
+    hasVulnerability = antiFeatures.contains(AntiFeature.KNOWN_VULN.key),
 )
 
 internal fun Map<String, IndexV1.Localized>.findLocalizedString(
