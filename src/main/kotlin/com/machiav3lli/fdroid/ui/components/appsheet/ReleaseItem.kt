@@ -43,6 +43,7 @@ import com.machiav3lli.fdroid.data.entity.ColoringState
 import com.machiav3lli.fdroid.ui.components.ActionButton
 import com.machiav3lli.fdroid.ui.compose.icons.Phosphor
 import com.machiav3lli.fdroid.ui.compose.icons.icon.IcVirustotal
+import com.machiav3lli.fdroid.ui.compose.icons.phosphor.CircleWavyWarning
 import com.machiav3lli.fdroid.ui.compose.icons.phosphor.Download
 import com.machiav3lli.fdroid.ui.compose.icons.phosphor.ShareNetwork
 import com.machiav3lli.fdroid.ui.compose.icons.phosphor.ShieldCheck
@@ -111,6 +112,11 @@ fun ReleaseItem(
                         text = stringResource(id = badgeText.intValue)
                     )
                 }
+                if (release.hasVulnerability) Icon(
+                    imageVector = Phosphor.CircleWavyWarning,
+                    contentDescription = stringResource(id = R.string.has_security_vulnerabilities),
+                    tint = MaterialTheme.colorScheme.error,
+                )
                 Icon(
                     modifier = Modifier
                         .clickable {
