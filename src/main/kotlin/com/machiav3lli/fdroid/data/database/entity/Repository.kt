@@ -252,7 +252,7 @@ data class Repository(
             true,
             "43238D512C1E5EB2D6569F4A3AFBF5523418B82E0A3ED1552770ABB9A9C9CCAB", "",
             "https://f-droid.org/packages/",
-            mirrorRotation = true, trusted = true,
+            mirrorRotation = false, trusted = true,
         )
         private val F_DROID_ARCHIVE =
             defaultRepository(
