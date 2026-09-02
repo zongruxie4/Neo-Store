@@ -14,6 +14,7 @@ import com.machiav3lli.fdroid.ROW_ANTIFEATURES
 import com.machiav3lli.fdroid.ROW_AUTHOR
 import com.machiav3lli.fdroid.ROW_ENABLED
 import com.machiav3lli.fdroid.ROW_FAVORITE
+import com.machiav3lli.fdroid.ROW_HAS_VULN
 import com.machiav3lli.fdroid.ROW_ID
 import com.machiav3lli.fdroid.ROW_IGNORED_VERSION
 import com.machiav3lli.fdroid.ROW_IGNORE_UPDATES
@@ -444,12 +445,22 @@ interface ProductDao : BaseDao<Product> {
                 FROM $TABLE_PRODUCT
                 JOIN $TABLE_INSTALLED ON $TABLE_PRODUCT.$ROW_PACKAGE_NAME = $TABLE_INSTALLED.$ROW_PACKAGE_NAME
                 LEFT JOIN $TABLE_EXTRAS ON $TABLE_PRODUCT.$ROW_PACKAGE_NAME = $TABLE_EXTRAS.$ROW_PACKAGE_NAME
-                WHERE $TABLE_PRODUCT.$ROW_REPOSITORY_ID = $repoId
+                WHERE $TABLE_PRODUCT.$ROW_REPOSITORY_ID = ?
                 AND $TABLE_PRODUCT.$ROW_ANTIFEATURES LIKE '%${AntiFeature.KNOWN_VULN.key}%'
                 AND COALESCE($TABLE_EXTRAS.$ROW_IGNORE_VULNS, 0) = 0
+                AND EXISTS (
+                    SELECT 1 FROM $TABLE_RELEASE 
+                    WHERE $TABLE_RELEASE.$ROW_PACKAGE_NAME = $TABLE_PRODUCT.$ROW_PACKAGE_NAME
+                    AND $TABLE_RELEASE.$ROW_REPOSITORY_ID = ?
+                    AND $TABLE_RELEASE.$ROW_VERSION_CODE >= COALESCE($TABLE_INSTALLED.$ROW_VERSION_CODE, 0xffffffff)
+                    AND $TABLE_RELEASE.$ROW_IS_COMPATIBLE = 1
+                    AND $TABLE_RELEASE.$ROW_HAS_VULN = 1
+                )
                 GROUP BY $TABLE_PRODUCT.$ROW_PACKAGE_NAME
                 ORDER BY $TABLE_PRODUCT.$ROW_LABEL COLLATE LOCALIZED ASC
-            """.trimIndent()
+            """.trimIndent(),
+                arrayOf(repoId,repoId)
+                //arrayOf(repoId)
             )
         )
 
