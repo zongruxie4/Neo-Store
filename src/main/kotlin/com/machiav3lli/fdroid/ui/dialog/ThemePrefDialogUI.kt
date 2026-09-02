@@ -1,5 +1,6 @@
 package com.machiav3lli.fdroid.ui.dialog
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
@@ -42,6 +43,7 @@ import com.machiav3lli.fdroid.ui.components.DialogPositiveButton
 import com.machiav3lli.fdroid.ui.components.SwitchRow
 import com.machiav3lli.fdroid.ui.components.common.ColorCircle
 import com.machiav3lli.fdroid.ui.compose.theme.presetColors
+import com.machiav3lli.fdroid.utils.extension.android.Android
 import com.materialkolor.Contrast
 import com.materialkolor.PaletteStyle
 
@@ -114,7 +116,7 @@ fun ThemePrefDialogUI(
                 ) {
                     Text(text = stringResource(R.string.dark))
                 }
-                SegmentedButton(
+                if (Android.sdk(Build.VERSION_CODES.Q)) SegmentedButton(
                     selected = nightMode == AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
                     onClick = { nightMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM },
                     border = BorderStroke(0.dp, Color.Transparent),
@@ -130,7 +132,7 @@ fun ThemePrefDialogUI(
                 }
             }
 
-            SwitchRow(
+            if (Android.sdk(Build.VERSION_CODES.S)) SwitchRow(
                 text = stringResource(R.string.dynamic_colors),
                 initSelected = { dynamicColor },
                 onCheckedChanged = { dynamicColor = it },
