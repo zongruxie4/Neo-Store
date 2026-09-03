@@ -34,6 +34,7 @@ class InstallerReceiver : BroadcastReceiver(), KoinComponent {
         const val KEY_ACTION = "installerAction"
         const val KEY_PACKAGE_LABEL = "packageLabel"
         const val ACTION_UNINSTALL = "uninstall"
+        const val ACTION_INSTALL = "install"
         const val INSTALLED_NOTIFICATION_TIMEOUT: Long = 5000
         const val DOWNLOADED_NOTIFICATION_TIMEOUT: Long = 2000
         const val NOTIFICATION_TAG_PREFIX = "install-"
@@ -51,6 +52,7 @@ class InstallerReceiver : BroadcastReceiver(), KoinComponent {
 
         val packageName =
             session?.appPackageName ?: intent?.getStringExtra(PackageInstaller.EXTRA_PACKAGE_NAME)
+        val uninstallAction = intent?.getStringExtra(KEY_ACTION) == ACTION_UNINSTALL
 
         Log.i(TAG, "Status: $status, Package: $packageName")
         // only trigger a prompt if in foreground, otherwise make notification
@@ -68,7 +70,7 @@ class InstallerReceiver : BroadcastReceiver(), KoinComponent {
                         val isNotInUserInteraction = !installer.isInUserInteraction(packageName) &&
                                 !(Android.sdk(Build.VERSION_CODES.R) && session?.isStagedSessionActive == true)
                         if (Utils.inForeground() && isNotInUserInteraction) {
-                            installer.reportUserInteraction(packageName)
+                            if (!uninstallAction) installer.reportUserInteraction(packageName)
                             // Triggers the installer prompt and "unknown apps" prompt if needed
                             val promptIntent: Intent? =
                                 intent.getParcelableExtra(Intent.EXTRA_INTENT)
