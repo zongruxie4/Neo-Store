@@ -189,10 +189,6 @@ val NonBooleanPrefsMeta = mapOf(
         R.string.prefs_language_title,
         Phosphor.Translate
     ),
-    Preferences.Key.Theme to Pair(
-        R.string.theme,
-        Phosphor.Swatches
-    ),
     Preferences.Key.AppTheme to Pair(
         R.string.theme,
         Phosphor.Swatches
@@ -276,28 +272,6 @@ val NonBooleanPrefsMeta = mapOf(
 )
 
 val PrefsEntries = mapOf(
-    Preferences.Key.Theme to mutableMapOf(
-        Preferences.Theme.Light to R.string.light,
-        Preferences.Theme.Dark to R.string.dark,
-        Preferences.Theme.Black to R.string.amoled,
-        Preferences.Theme.LightMediumContrast to R.string.light_medium_contrast,
-        Preferences.Theme.DarkMediumContrast to R.string.dark_medium_contrast,
-        Preferences.Theme.BlackMediumContrast to R.string.black_medium_contrast,
-        Preferences.Theme.LightHighContrast to R.string.light_high_contrast,
-        Preferences.Theme.DarkHighContrast to R.string.dark_high_contrast,
-        Preferences.Theme.BlackHighContrast to R.string.black_high_contrast,
-    ).apply {
-        if (Android.sdk(Build.VERSION_CODES.Q)) {
-            put(Preferences.Theme.System, R.string.system)
-            put(Preferences.Theme.SystemBlack, R.string.system_black)
-        }
-        if (Android.sdk(Build.VERSION_CODES.S)) {
-            put(Preferences.Theme.Dynamic, R.string.dynamic)
-            put(Preferences.Theme.DynamicLight, R.string.dynamic_light)
-            put(Preferences.Theme.DynamicDark, R.string.dynamic_dark)
-            put(Preferences.Theme.DynamicBlack, R.string.dynamic_black)
-        }
-    },
     Preferences.Key.DefaultTab to mapOf(
         Preferences.DefaultTab.Latest to R.string.latest,
         Preferences.DefaultTab.Explore to R.string.explore,

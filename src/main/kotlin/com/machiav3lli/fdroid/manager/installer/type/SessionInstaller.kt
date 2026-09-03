@@ -82,13 +82,15 @@ class SessionInstaller(context: Context) : BaseInstaller(context) {
 
     private fun createInstallerIntent(packageName: String): Intent {
         return Intent(context, InstallerReceiver::class.java).apply {
+            putExtra(InstallerReceiver.KEY_ACTION, InstallerReceiver.ACTION_INSTALL)
             putExtra(PackageInstaller.EXTRA_PACKAGE_NAME, packageName)
         }
     }
 
-    private fun createUninstallerIntent(): Intent {
+    private fun createUninstallerIntent(packageName: String): Intent {
         return Intent(context, InstallerReceiver::class.java).apply {
             putExtra(InstallerReceiver.KEY_ACTION, InstallerReceiver.ACTION_UNINSTALL)
+            putExtra(PackageInstaller.EXTRA_PACKAGE_NAME, packageName)
         }
     }
 
@@ -282,7 +284,7 @@ class SessionInstaller(context: Context) : BaseInstaller(context) {
 
     override suspend fun uninstall(packageName: String) {
         runCatching {
-            val intent = createUninstallerIntent()
+            val intent = createUninstallerIntent(packageName)
             val pendingIntent = PendingIntent.getBroadcast(
                 context,
                 -1,

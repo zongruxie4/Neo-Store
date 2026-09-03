@@ -144,6 +144,7 @@ enum class AntiFeature(val key: String, @StringRes val titleResId: Int) {
 
 fun String.toAntiFeature(): AntiFeature? = AntiFeature.entries.find { it.key == this }
 
+@Immutable
 sealed interface ComponentState {
     val icon: ImageVector
     val textId: Int

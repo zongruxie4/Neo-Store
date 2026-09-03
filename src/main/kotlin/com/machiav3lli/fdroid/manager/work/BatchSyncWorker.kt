@@ -46,6 +46,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import org.koin.core.component.KoinComponent
@@ -171,9 +172,7 @@ class BatchSyncWorker(
                     }
                     removeSyncProgress(repo.id)
 
-                    if (result.changed) {
-                        handleRepositoryCompletion(repo.id)
-                    }
+                    if (result.success) handleRepositoryCompletion(repo.id)
                 }
             }
         }.awaitAll()
@@ -256,36 +255,36 @@ class BatchSyncWorker(
         }
     }
 
-    private suspend fun handleRepositoryCompletion(repoId: Long) = coroutineScope {
-        val updatesDeferred = async {
-            installedRepo.loadUpdatedProducts()
-                .map { it.toItem() }
-                .filter { it.repositoryId == repoId }
-        }
+    private suspend fun handleRepositoryCompletion(repoId: Long) =
+        coroutineScope {
+            val updatesJob = launch {
+                val updates = installedRepo.loadUpdatedProducts()
+                    .map { it.toItem() }
+                    .filter { it.repositoryId == repoId }
+                if (updates.isNotEmpty() && Preferences[Preferences.Key.UpdateNotify]) {
+                    updatesManager.addUpdates(*updates.toTypedArray())
+                }
 
-        val vulnsDeferred = async {
-            installedRepo.loadListWithVulns(repoId)
-        }
+                if (Preferences[Preferences.Key.InstallAfterSync]) {
+                    NeoApp.wm.update(
+                        enforce = false,
+                        *updates.map { Pair(it.packageName, it.repositoryId) }.toTypedArray()
+                    )
+                }
+            }
 
-        val updates = updatesDeferred.await()
-        if (updates.isNotEmpty() && Preferences[Preferences.Key.UpdateNotify]) {
-            updatesManager.addUpdates(*updates.toTypedArray())
-        }
+            val vulnsJob = async {
+                val installedWithVulns = installedRepo.loadListWithVulns(repoId)
+                if (installedWithVulns.isNotEmpty()) {
+                    langContext.displayVulnerabilitiesNotification(
+                        installedWithVulns.map { it.toItem() }
+                    )
+                }
+            }
 
-        if (Preferences[Preferences.Key.InstallAfterSync]) {
-            NeoApp.wm.update(
-                enforce = false,
-                *updates.map { Pair(it.packageName, it.repositoryId) }.toTypedArray()
-            )
+            updatesJob.join()
+            vulnsJob.join()
         }
-
-        val installedWithVulns = vulnsDeferred.await()
-        if (installedWithVulns.isNotEmpty()) {
-            langContext.displayVulnerabilitiesNotification(
-                installedWithVulns.map { it.toItem() }
-            )
-        }
-    }
 
     override suspend fun getForegroundInfo(): ForegroundInfo {
         return createForegroundInfo(repositoryIds.size, 0)

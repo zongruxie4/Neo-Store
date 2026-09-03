@@ -69,7 +69,7 @@ object Android {
     object PackageManager {
         // GET_SIGNATURES should always present for getPackageArchiveInfo
         val signaturesFlag: Int
-            get() = (if (sdk(Build.VERSION_CODES.P)) android.content.pm.PackageManager.GET_SIGNING_CERTIFICATES else 0) or
-                    @Suppress("DEPRECATION") android.content.pm.PackageManager.GET_SIGNATURES
+            get() = if (sdk(Build.VERSION_CODES.P)) android.content.pm.PackageManager.GET_SIGNING_CERTIFICATES
+            else @Suppress("DEPRECATION") android.content.pm.PackageManager.GET_SIGNATURES
     }
 }
