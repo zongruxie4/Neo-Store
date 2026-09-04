@@ -61,7 +61,6 @@ import com.materialkolor.Contrast
 import com.topjohnwu.superuser.Shell
 import io.ktor.http.HttpStatusCode
 import rikka.shizuku.Shizuku
-import rikka.shizuku.ShizukuProvider
 import rikka.sui.Sui
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
@@ -598,13 +597,7 @@ val Context.amInstalled: Boolean
 
 val Context.hasShizukuOrSui: Boolean
     get() = Android.sdk(Build.VERSION_CODES.O) &&
-            (hasShizukuPermissionV23() || Sui.isSui())
-
-private fun Context.hasShizukuPermissionV23(): Boolean {
-    return packageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS).any { pkgInfo ->
-        pkgInfo.requestedPermissions?.contains(ShizukuProvider.PERMISSION) == true
-    }
-}
+            (Shizuku.pingBinder() || Sui.isSui())
 
 fun hasShizukuPermission(): Boolean =
     Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
