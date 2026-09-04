@@ -219,6 +219,7 @@ fun PrefsOtherPage(
                     colors = ListItemDefaults.colors(
                         containerColor = Color.Transparent,
                     ),
+                    verticalAlignment = Alignment.CenterVertically,
                     leadingContent = {
                         ResourcesCompat.getDrawable(
                             LocalContext.current.resources,

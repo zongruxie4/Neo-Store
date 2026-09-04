@@ -159,6 +159,7 @@ fun ProductItemContent(
 @Composable
 fun ProductCarouselItem(
     product: ProductItem,
+    modifier: Modifier = Modifier,
     repo: Repository? = null,
     favourite: Boolean = false,
     onFavourite: (ProductItem) -> Unit = {},
@@ -186,7 +187,7 @@ fun ProductCarouselItem(
     }
 
     ListItem(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize(),
         onClick = { onUserClick(product) },
         shapes = ListItemDefaults.shapes(
@@ -195,17 +196,13 @@ fun ProductCarouselItem(
         colors = ListItemDefaults.colors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer,
         ),
+        verticalAlignment = Alignment.CenterVertically,
         leadingContent = {
-            Column(
-                modifier = Modifier.fillMaxHeight(),
-                verticalArrangement = Arrangement.Center,
-            ) {
-                NetworkImage(
-                    modifier = Modifier.size(PRODUCT_CARD_ICON),
-                    data = imageDataPair.first,
-                    fallbackData = imageDataPair.second,
-                )
-            }
+            NetworkImage(
+                modifier = Modifier.size(PRODUCT_CARD_ICON),
+                data = imageDataPair.first,
+                fallbackData = imageDataPair.second,
+            )
         },
         content = {
             Row(

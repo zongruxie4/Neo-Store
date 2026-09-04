@@ -121,6 +121,7 @@ fun TopBarHeader(
             colors = ListItemDefaults.colors(
                 containerColor = Color.Transparent,
             ),
+            verticalAlignment = Alignment.CenterVertically,
             leadingContent = {
                 NetworkImage(
                     modifier = Modifier.size(PRODUCT_CARD_ICON),
@@ -129,10 +130,10 @@ fun TopBarHeader(
                 )
             },
             content = {
-                Text(text = appName, style = MaterialTheme.typography.titleMedium)
+                Text(text = appName)
             },
             supportingContent = {
-                Text(text = packageName, style = MaterialTheme.typography.bodyMedium)
+                Text(text = packageName)
             },
             trailingContent = {
                 actions()
@@ -278,6 +279,7 @@ fun WarningCard(message: String) {
         colors = ListItemDefaults.colors(
             containerColor = MaterialTheme.colorScheme.errorContainer,
         ),
+        verticalAlignment = Alignment.CenterVertically,
         leadingContent = {
             Icon(
                 imageVector = Phosphor.CircleWavyWarning,

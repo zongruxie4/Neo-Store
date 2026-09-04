@@ -183,6 +183,7 @@ fun RepoPage(
                 colors = ListItemDefaults.colors(
                     containerColor = Color.Transparent,
                 ),
+                verticalAlignment = Alignment.Top,
                 overlineContent = {
                     Text(text = stringResource(id = R.string.name))
                 },

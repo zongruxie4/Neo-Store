@@ -348,6 +348,7 @@ fun ExplorePage(
                                 colors = ListItemDefaults.colors(
                                     containerColor = Color.Transparent,
                                 ),
+                                verticalAlignment = Alignment.CenterVertically,
                                 trailingContent = {
                                     FilledRoundButton(
                                         icon = Phosphor.Info,
