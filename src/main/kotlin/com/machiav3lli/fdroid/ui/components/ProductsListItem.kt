@@ -261,7 +261,8 @@ fun ProductCarouselItem(
                     horizontalArrangement = Arrangement.End,
                 ) {
                     IconButton(
-                        onClick = { onFavourite(product) }
+                        onClick = { onFavourite(product) },
+                        shapes = IconButtonDefaults.shapes(),
                     ) {
                         Icon(
                             imageVector = if (favourite) Phosphor.HeartStraightFill else Phosphor.HeartStraight,
@@ -273,6 +274,7 @@ fun ProductCarouselItem(
                     action?.let {
                         IconButton(
                             modifier = Modifier.width(52.dp),
+                            shapes = IconButtonDefaults.shapes(),
                             colors = IconButtonDefaults.iconButtonColors(
                                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer,

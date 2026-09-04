@@ -8,18 +8,16 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -41,13 +39,14 @@ fun RoundButton(
     onLongClick: (() -> Unit) = {},
     onClick: (() -> Unit),
 ) {
-    Surface(
+    IconButton(
         modifier = modifier
-            .clip(CircleShape)
-            .combinedClickable(role = Role.Button, onClick = onClick, onLongClick = onLongClick)
-            .padding(8.dp),
-        shape = CircleShape,
-        color = Color.Transparent,
+            .combinedClickable(role = Role.Button, onClick = onClick, onLongClick = onLongClick),
+        shapes = IconButtonDefaults.shapes(
+            shape = CircleShape,
+        ),
+        colors = IconButtonDefaults.iconButtonColors(),
+        onClick = onClick,
     ) {
         Icon(
             imageVector = icon,
@@ -69,6 +68,9 @@ fun FilledRoundButton(
 ) {
     FilledTonalIconButton(
         modifier = modifier,
+        shapes = IconButtonDefaults.shapes(
+            shape = CircleShape,
+        ),
         colors = IconButtonDefaults.filledTonalIconButtonColors(
             containerColor = tint,
             contentColor = onTint,

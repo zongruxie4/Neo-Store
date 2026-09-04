@@ -18,9 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -52,6 +50,7 @@ fun ActionButton(
 ) {
     FilledTonalButton(
         modifier = modifier,
+        shapes = ButtonDefaults.shapes(),
         colors = ButtonDefaults.filledTonalButtonColors(
             contentColor = when (coloring) {
                 ColoringState.Positive -> MaterialTheme.colorScheme.onPrimaryContainer
@@ -90,6 +89,7 @@ fun OutlinedActionButton(
 ) {
     OutlinedButton(
         modifier = modifier,
+        shapes = ButtonDefaults.shapes(),
         colors = ButtonDefaults.outlinedButtonColors(
             contentColor = when (coloring) {
                 ColoringState.Positive -> MaterialTheme.colorScheme.primary
@@ -131,6 +131,7 @@ fun FlatActionButton(
 ) {
     TextButton(
         modifier = modifier,
+        shapes = ButtonDefaults.shapes(),
         colors = ButtonDefaults.textButtonColors(
             contentColor = when (coloring) {
                 ColoringState.Positive -> MaterialTheme.colorScheme.primary
@@ -185,13 +186,16 @@ fun MainActionButton(
         }, label = "contentColor"
     )
 
-    ExtendedFloatingActionButton(
+    FilledTonalButton(
         modifier = modifier,
-        shape = MaterialTheme.shapes.extraLarge,
-        containerColor = containerColor,
-        contentColor = contentColor,
-        elevation = FloatingActionButtonDefaults.elevation(0.dp),
-        onClick = onClick
+        shapes = ButtonDefaults.shapes(
+            shape = MaterialTheme.shapes.extraLarge,
+        ),
+        colors = ButtonDefaults.filledTonalButtonColors(
+            containerColor = containerColor,
+            contentColor = contentColor,
+        ),
+        onClick = onClick,
     ) {
         AnimatedContent(
             targetState = actionState,
@@ -257,7 +261,9 @@ fun SecondaryActionButton(
 ) {
     OutlinedIconButton(
         modifier = modifier.size(56.dp),
-        shape = MaterialTheme.shapes.extraLarge,
+        shapes = IconButtonDefaults.shapes(
+            shape = MaterialTheme.shapes.extraLarge,
+        ),
         colors = IconButtonDefaults.outlinedIconButtonColors(
             contentColor = MaterialTheme.colorScheme.secondary,
         ),

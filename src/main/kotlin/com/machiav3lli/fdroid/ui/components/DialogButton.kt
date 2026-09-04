@@ -18,7 +18,9 @@ fun DialogPositiveButton(
     onClick: () -> Unit = {}
 ) {
     TextButton(
-        shape = MaterialTheme.shapes.large,
+        shapes = ButtonDefaults.shapes(
+            shape = MaterialTheme.shapes.large
+        ),
         onClick = onClick,
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(
@@ -41,7 +43,9 @@ fun DialogNegativeButton(
     onClick: () -> Unit = {}
 ) {
     TextButton(
-        shape = MaterialTheme.shapes.large,
+        shapes = ButtonDefaults.shapes(
+            shape = MaterialTheme.shapes.large
+        ),
         onClick = onClick,
         modifier = modifier
     ) {

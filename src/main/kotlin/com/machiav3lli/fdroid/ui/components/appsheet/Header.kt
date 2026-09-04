@@ -2,10 +2,8 @@ package com.machiav3lli.fdroid.ui.components.appsheet
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -35,6 +33,7 @@ import com.machiav3lli.fdroid.R
 import com.machiav3lli.fdroid.data.entity.ActionState
 import com.machiav3lli.fdroid.data.entity.DownloadState
 import com.machiav3lli.fdroid.data.entity.SourceType
+import com.machiav3lli.fdroid.ui.components.FilledRoundButton
 import com.machiav3lli.fdroid.ui.components.MainActionButton
 import com.machiav3lli.fdroid.ui.components.NetworkImage
 import com.machiav3lli.fdroid.ui.components.PRODUCT_CARD_ICON
@@ -160,19 +159,15 @@ fun CardButton(
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = {},
 ) {
-    Box(
+    FilledRoundButton(
+        icon = icon,
+        description = description,
+        tint = MaterialTheme.colorScheme.surfaceContainerHigh,
+        onTint = MaterialTheme.colorScheme.onSurface,
         modifier = modifier
-            .clip(MaterialTheme.shapes.medium)
-            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-            .combinedClickable(role = Role.Button, onClick = onClick, onLongClick = onLongClick)
-            .padding(8.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = description
-        )
-    }
+            .combinedClickable(role = Role.Button, onClick = onClick, onLongClick = onLongClick),
+        onClick = onClick,
+    )
 }
 
 @Composable
